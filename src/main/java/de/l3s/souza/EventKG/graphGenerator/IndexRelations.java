@@ -1,9 +1,14 @@
 package de.l3s.souza.EventKG.graphGenerator;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -366,7 +371,8 @@ public class IndexRelations {
 			String relationId = "";
 			String predicateRelation = "";
 			Snapshot relation;
-			
+			String currentRecord = "";
+			String idRecord = "";
 			while ((line=br.readLine())!=null)
 	    	{
 	    		
@@ -374,13 +380,14 @@ public class IndexRelations {
 	    			continue;
 	    		
 	    		StringTokenizer tokenRelations = new StringTokenizer (line);
-	    		
+	    		StringTokenizer tokenRelationId = new StringTokenizer (line);
+	    	
 	    		if (line.contains("rdf:type"))
 				{
 					relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "type");
-				
+					currentRecord = currentRecord + line;
 				}
 	    		
 	    		if (line.contains("rdf:subject"))
@@ -389,7 +396,7 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "subject");
-
+					currentRecord = currentRecord + line;
 
 				}
 	    		
@@ -399,7 +406,7 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "owl");
-
+					currentRecord = currentRecord + line;
 
 				}
 	    		
@@ -418,7 +425,7 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "object");
-
+					currentRecord = currentRecord + line;
 
 				}
 	    		
@@ -435,7 +442,7 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "begintimestamp");
-
+					currentRecord = currentRecord + line;
 				}
 	    		
 	    		
@@ -446,7 +453,7 @@ public class IndexRelations {
 	    				relationId = tokenRelations.nextToken();
 	    				predicateRelation = line.replaceAll(relationId + " ", "");
 						updateMap (relationId, predicateRelation, "roletype");
-		
+						currentRecord = currentRecord + line;
 	    			}
 	    			else
 	    				data.remove(relationId);
@@ -484,7 +491,7 @@ public class IndexRelations {
 	    	return output;
 	    	
 		}
-		
+	
 		private static void updateMap (String relationId,String predicateRelation, String property)
 		{
 			RelationSnapshot relation;

@@ -55,14 +55,19 @@ public class EventkgClient {
 			 Future<?> future = executor.submit(new Runnable() {
 			        @Override
 			        public void run() {
-			        	readLines(uri);    
+			        	try {
+							readLines(uri);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}    
 			        }
 			    });
 
 			    executor.shutdown();            //        <-- reject all further submissions
 
 			    try {
-			        future.get(2, TimeUnit.SECONDS);  //     <-- wait 8 seconds to finish
+			        future.get(1, TimeUnit.SECONDS);  //     <-- wait 2 seconds to finish
 			    } catch (InterruptedException e) {    //     <-- possible error cases
 			        System.out.println("job was interrupted");
 			    } catch (ExecutionException e) {
@@ -70,20 +75,26 @@ public class EventkgClient {
 			    } catch (TimeoutException e) {
 			        future.cancel(true);              //     <-- interrupt the job
 			        System.out.println("timeout");
+			        Thread.sleep(5000);
 			    }
 
 			    // wait all unfinished tasks for 2 sec
-			    if(!executor.awaitTermination(2, TimeUnit.SECONDS)){
+			    if(!executor.awaitTermination(1, TimeUnit.SECONDS)){
 			        // force them to quit by interrupting
 			        executor.shutdownNow();
 			    }
 			    
 
+			//readLines(uri);
 			if (lines.contains("excep") || lines.isEmpty())
 			{
 				hasException = true;
 				return false;
 			}
+			
+			if (lines.contains("\"boolean\": true") || lines.contains("\"boolean\": false"))
+				return true;
+			
 			JSONObject json = new JSONObject(lines);
 
 			JSONArray arr = json.getJSONObject("results").getJSONArray("bindings");
@@ -95,19 +106,6 @@ public class EventkgClient {
 			else
 				return false;
 
-		/*	String id = json.getJSONObject("results").getJSONArray("bindings").getJSONObject(0)
-					.getJSONObject("entity_id").getString("value");
-			id = id.substring(id.lastIndexOf("/") + 1);
-
-			/*
-			 * KGEntity entity = new KGEntity(id, sourceLabel);
-			 * entity.addLabel(Language.EN, label);
-			 * 
-			 * this.entitiesByLabel.put(label, entity);
-			 * this.entitiesById.put(id, entity);
-			 * 
-			 * return entity;
-			 */
 		} catch (IOException e) {
 			return false;
 		} catch (JSONException e) {
@@ -123,8 +121,7 @@ public class EventkgClient {
 		return hasException;
 	}
 	
-	
-	private void readLines(String uri) {
+	private void readLines(String uri) throws InterruptedException {
 
 		lines = "";
 		boolean succesfull = false;
@@ -135,11 +132,8 @@ public class EventkgClient {
 			} catch (IOException e) {
 				System.out.println("IOException in loadRelations. Repeat. URI: " + uri + ".");
 				lines = "excep";
-				/*try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}*/
+		        Thread.sleep(5000);
+				
 			}
 		}
 

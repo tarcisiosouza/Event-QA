@@ -1,6 +1,5 @@
 package de.l3s.souza.EventKG.queriesGenerator;
 
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,6 +76,7 @@ public class GenerateSPARQLqueries {
 	private static String subjectId = "";
 	private static String subjectIdr1 = "";
 	private static String subjectIdr2 = "";
+	private static String queryType;
 	private static HashSet<String> dbos = new HashSet<String>();
 	public static void main (String args[]) throws IOException, InterruptedException
 	{
@@ -85,6 +86,7 @@ public class GenerateSPARQLqueries {
 		r1 = new RelationSnapshot ();
 		r2 = new RelationSnapshot ();
 		pairRelationsRoletypeEntity = new HashSet<String>();
+		System.out.println("Reading data...");
 		RelationsIndex = indexRelations.getNewRelationIndex("/home/souza/EventKG/data/output/relations_other.nq");
 		eventsFromRelationsOther = indexRelations.getEvents();
 		dbos = indexRelations.getDbos();
@@ -92,6 +94,9 @@ public class GenerateSPARQLqueries {
 		removeNonDboRelations ();
 		//EntitiesIndex = indexRelations.getNewRelationIndex("/home/souza/EventKG/data/output/entities.nq");
 		//EventsIndex = indexRelations.getNewRelationIndex("/home/souza/EventKG/data/output/events.nq");
+		
+		System.out.println("Reading completed!");
+		
 		File fileWd = new File ("/home/souza/EventKG/data/output/property_labels.nq");
 		FileReader fileWdR = new FileReader (fileWd);
 		BufferedReader brFileWdR = new BufferedReader (fileWdR);
@@ -170,6 +175,9 @@ public class GenerateSPARQLqueries {
 				
 				if (relation.getRoleType().contains("dbo"))
 				{
+					if (relationIdsDbo.isEmpty())
+						relationIdsDbo = currentRelationId;
+					else
 					relationIdsDbo = relationIdsDbo + " " + currentRelationId;
 				}
 					
@@ -206,14 +214,19 @@ public class GenerateSPARQLqueries {
 		 }
 		 
 		// while (totalGenerated <= MAX_KEYS)
-		 while (!(RelationsIndex.isEmpty()) && !(dbos.isEmpty()) && generated  < 4600)
+		 while (!(RelationsIndex.isEmpty()) && !(dbos.isEmpty()) && generated  < 500)
 		 {
-		
+			 String eventId = "";
+			 String relationId1="";
+	    	 String relationId2="";
+	    	 String	roletyper1="";
+	    	 String	roletyper2="";
 			 node = randomFilter.getRandomValue(nodeTypes);
 			
 			 if (eventsFromRelationsOther.isEmpty())
 			 	node = "entity";
 			 
+			 //node = "event";
 			 if (node.contains("entity"))
 				 maxint = RelationsIndex.size() ;
 			 else
@@ -238,14 +251,21 @@ public class GenerateSPARQLqueries {
     		
 	    	if (node.contains("entity"))
 	    	{
+	    		
+	    		System.out.print("index "+RelationsIndex.size() + " " + dbos.size()+"\n");
 	    		String relationId = relationsKeySet.get(randomNumberGenerated);
 	    		relationSnapshot = RelationsIndex.get(relationId);
+	    		generateQueryType ();
 	    		
 	    		RelationsIndex.remove(relationId);
 	    		relationsKeySet.remove(randomNumberGenerated);
-	    		if (!relationSnapshot.getRoleType().contains("dbo:"))
+	    		if (relationSnapshot != null)
+	    		{
+	    			if (relationSnapshot.getRoleType()==null || !relationSnapshot.getRoleType().contains("dbo:"))
 	    			continue;
-	    	
+	    		}
+	    		else
+	    			continue;
 	    		dbos.remove(relationSnapshot.getRoleType());
 	    	/*	if (relationSnapshot.getRoleType().contains("wdt:"))
 	    			continue;
@@ -284,17 +304,26 @@ public class GenerateSPARQLqueries {
 	    	
 	    	if (node.contains("event"))
 	    	{
-	    		String eventId = relationsKeySetEntities.get(randomNumberGenerated);
+	    		
+	    		System.out.print("index "+RelationsIndex.size() + " " + dbos.size()+"\n");
+
+	    		eventId = relationsKeySetEntities.get(randomNumberGenerated);
+	    		
 	    		String relations = eventsFromRelationsOther.get(eventId);
 	    		StringTokenizer tokenRelations = new StringTokenizer (relations);
+	    		generateQueryType ();
+	    		
 	    		try {
 	    			
-	    			String relationId1 = tokenRelations.nextToken();
-	    			String relationId2 = tokenRelations.nextToken();
+	    			 relationId1 = tokenRelations.nextToken();
+	    			 relationId2 = tokenRelations.nextToken();
 	    		
 	    			r1 = RelationsIndex.get(relationId1);
 	    			r2 = RelationsIndex.get(relationId2);
 	    			r1.setId(relationId1);
+	    			RelationsIndex.remove(relationId1);
+	    			RelationsIndex.remove(relationId2);
+
 	    			r2.setId(relationId2);
 	    		} catch (Exception e)
 	    		{
@@ -304,15 +333,24 @@ public class GenerateSPARQLqueries {
 	    			continue;
 	    		}
 	    	
-	    		if (pairRelationsRoletypeEvent.contains(r1.getRoleType() + " " + r2.getRoleType()))
+	    		StringTokenizer tokenr1 = new StringTokenizer (r1.getRoleType());
+	    		roletyper1 = tokenr1.nextToken();
+	    		roletyper1 = tokenr1.nextToken();
+	    		
+	    		StringTokenizer tokenr2 = new StringTokenizer (r2.getRoleType());
+	    		roletyper2 = tokenr2.nextToken();
+	    		roletyper2 = tokenr2.nextToken();
+	    		if (pairRelationsRoletypeEvent.contains(roletyper1 + " " + roletyper2 + " " +queryType))
 	    		{
-	    			relations = relations.replaceAll(r1.getRoleType() + " " + r2.getRoleType(), "");
+	    			relations = relations.replaceAll(relationId1 + " ", "");
+	    			relations = relations.replaceAll(relationId2 + " ", "");
 	    			eventsFromRelationsOther.put(eventId, relations);
 	    			continue;
 	    		}
 	    		
-	    		pairRelationsRoletypeEvent.add(r1.getRoleType() + " " + r2.getRoleType());
-	    		relations = relations.replaceAll(r1.getRoleType() + " " + r2.getRoleType(), "");
+	    		pairRelationsRoletypeEvent.add(roletyper1 + " " + roletyper2 + " " +queryType);
+	    		relations = relations.replaceAll(relationId1 + " ", "");
+    			relations = relations.replaceAll(relationId2 + " ", "");
 	    		eventsFromRelationsOther.put(eventId, relations);
 	    		
 	    		/*eventsFromRelationsOther.remove(eventId);
@@ -322,7 +360,6 @@ public class GenerateSPARQLqueries {
 	    		subjectIdr2 = relationUtils.getSubObjIdFromRelation(r2, "subject");
 	    		objectIdr1 = relationUtils.getSubObjIdFromRelation(r1, "object"); 
 	    		objectIdr2 = relationUtils.getSubObjIdFromRelation(r2, "object"); 
-	    	
 	    		
 	    		if (r1.getObject().contains("<event"))
 	    			eventAttrib = propertyUtils.getAttributes (objectIdr1);
@@ -340,148 +377,76 @@ public class GenerateSPARQLqueries {
 	    			eventAttrib = propertyUtils.getAttributes (subjectId);*/
 	    	}
 	    	
-	    	
-	    	System.out.println(generated);
+	    	System.out.println("generated " + generated);
 	    	StringTokenizer tokenEntitySub;
 	    	StringTokenizer tokenEntityObj;
 	    	String obj;
 	    	String sub;
 	    	
+	    	pairRelationsRoletypeEvent.remove(roletyper1 + " " + roletyper2 + " " +queryType);
 	    	expandFromRelation (subjectId,objectId,eventAttrib,node);
 	    	
+	    	pairRelationsRoletypeEvent.add(roletyper1 + " " + roletyper2 + " " +queryType);
 	    	
-	    //	expandFromEvent ();
-	    	
-	    	if (type.contains("jgr"))
-	    	{
-	    		tokenEntitySub = new StringTokenizer (relationSnapshot.getSubject());	
-	    		tokenEntityObj = new StringTokenizer (relationSnapshot.getObject());
-	    		obj = tokenEntityObj.nextToken();
-		        obj = tokenEntityObj.nextToken();
-		    	
-		        sub = tokenEntitySub.nextToken();
-		        sub = tokenEntitySub.nextToken();
-	    
-	   	 		es2.setKeywords(sub);
-	   	 		es2.setRandomSearch(false);
-	   	 		es2.setIndexName("souza_eventkg");
-	   	 		es2.setLimit(1);
-	   	 		es2.run();
-	   	 		
-	   	 		Map<String,String> resSub = es2.getGenericDocuments();
-	   	    
-	   	 		String typeResSub = getTypeEntity (resSub);
-	   	    
-	   	 		es2.setKeywords(obj);
-	   	 		es2.setIndexName("souza_eventkg");
-	   	 		es2.setLimit(1);
-	   	 		es2.run();
-	   	 	
-	   	 		Map<String,String> resObj = es2.getGenericDocuments();
-	   	    
-	   	 		String typeResObj = getTypeEntity (resObj);
-	   	    
-	   	 			/*  if (!typeResObj.contains("Place") && !(typeResSub.contains("Place")))
-	   	    		continue;
-	   	 			 */
-	   	 		StringTokenizer tokenRoleType = new StringTokenizer (relationSnapshot.getRoleType());
-	   	 		String role = tokenRoleType.nextToken();
-	   	 		role = tokenRoleType.nextToken();
-	   	 		while (relationSnapshot.getObject().isEmpty() /*|| roleTypes.contains(role)*/)
-	   	 		{
-	   	 			while (generatedKeys.contains(generated = random.nextInt(maxint)))
-	   	 				generated = random.nextInt(maxint);
-	    		
-	   	 			es.setIndexName("souza_eventkg_relations");
-	   	 			es.setRand(generated);
-	   	 			es.run();
-	   	 			relationSnapshot = es.getRelation();
-		    	
-	   	 			try {
-	   	 				tokenRoleType = new StringTokenizer (relationSnapshot.getRoleType());
-	   	 				role = tokenRoleType.nextToken();
-	   	 				role = tokenRoleType.nextToken();
-	   	 			} catch (Exception e)
-	   	 			{
-	   	 				System.out.print("");
-	   	 			}
-	   	 		}
-	   	 		generatedRelationKeys.add(relationSnapshot.getId());
-	   	 		//System.out.println(relationSnapshot.getId() + "sub: " + relationSnapshot.getSubject() +" obj: " + relationSnapshot.getObject() );
-	   	 		totalGenerated++;
-	    	
-	   	 		if (totalGenerated%500 == 0)
-	   	 			System.out.println(("current Generated : "+totalGenerated + " of " + MAX_KEYS));
-	   	 		generatedRelations.put(relationSnapshot.getId(),relationSnapshot);
-	    	
-	   	 		roleTypes.add(role);
-	   	 		
-	    	}
-	        
-	      
-	  //  	System.out.println(totalGenerated);
 	    	}	
 	}
 	
+	private static void generateQueryType ()
+	{
+		ArrayList<String> queryTypes = new ArrayList<String>();
+		queryTypes.add("ask");
+		queryTypes.add("select");
+		queryTypes.add("count");
+		queryType = randomFilter.getRandomValue(queryTypes);
+	}
 	
 	private static void expandFromRelation (String subId, String obId, String eventAttrib, String node) throws IOException, InterruptedException
 	{
 		QueryUtils queryUtils;
+		String prefix = "PREFIX eventKG-r: <http://eventKG.l3s.uni-hannover.de/resource/>\n"
+				+ "PREFIX eventKG-s: <http://eventKG.l3s.uni-hannover.de/schema/>\n"
+				+ "PREFIX eventKG-g: <http://eventKG.l3s.uni-hannover.de/graph/>\n"
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" + "PREFIX so: <http://schema.org/>\n"
+				+ "PREFIX sem: <http://semanticweb.cs.vu.nl/2009/11/sem/>\n"
+				+ "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
+				+ "PREFIX wdt: <http://www.wikidata.org/prop/direct/>"
+				+ "PREFIX dbo: <http://dbpedia.org/ontology/>\n"
+				+ "PREFIX owl: <http://www.w3.org/2002/07/owl#>\n" + "PREFIX dbr: <http://dbpedia.org/resource/>\n"
+				+ "PREFIX dbpedia-de: <http://de.dbpedia.org/resource/>\n"
+				+ "PREFIX dcterms: <http://purl.org/dc/terms/>\n" ;
+
+		
 	  if (node.contains("entity"))	
 		 queryUtils = new QueryUtils (relationSnapshot, eventAttrib, obId, subId, timeStampUtils, relationUtils, 
-				propertyUtils,es,eventsFromRelationsOther, pairRelationsRoletypeEntity);
+				propertyUtils,es,eventsFromRelationsOther, pairRelationsRoletypeEntity,queryType);
 	  else
 		   queryUtils = new QueryUtils (r1,r2, eventAttrib, objectIdr1, objectIdr2,subjectIdr1, subjectIdr2, timeStampUtils, relationUtils, 
-					propertyUtils,es,eventsFromRelationsOther); 
+					propertyUtils,es,eventsFromRelationsOther,queryType); 
 	  
 		HashSet<String> queriesCreated = new HashSet<String> ();
 		
+		queryType = queryUtils.getQueryType();
 		/*if (node.contains("entity"))
 			query = queryUtils.getQueryFirstRelation();
 		*/
 		query = queryUtils.getQuerySubGraph(node);
-		
+			
 		if (node.contains("entity"))
+		{
+		
 			pairRelationsRoletypeEntity = queryUtils.getPairRelationsRoletypeEntity();
+		}
 		
 		if (!query.isEmpty() && query.length()>400)
 		{
-			sb.append("Query number:" + generated + "\n");
+			//query = URLEncoder.encode(prefix + query, "UTF-8") ;
+			
+			sb.append("#Query number: " + generated + "\n");
 			sb.append(query + "\n");
 			queriesCreated.add(query); 
 			generated ++;
 		}
 				
-	}
-	
-	private static String getTypeEntity (Map<String,String> genericDocuments)
-	{
-		
-		String typeEntity = "";
-		 for (Entry<String, String> document : genericDocuments.entrySet())
-			{
-			 
-			    String value = document.getValue();
-				StringTokenizer tokenLine = new StringTokenizer (value, "\n");
-				
-				while (tokenLine.hasMoreTokens())
-				{
-					String currentLine = tokenLine.nextToken();
-
-					if (currentLine.contains("rdf:type"))
-					{
-						StringTokenizer tokenType = new StringTokenizer (currentLine);
-						typeEntity = tokenType.nextToken();
-						typeEntity = tokenType.nextToken();
-					}
-					
-				}
-				
-			 
-			}
-		 
-		 return typeEntity;
-		
 	}
 	
 }

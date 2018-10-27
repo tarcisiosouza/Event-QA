@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 
 import de.l3s.elasticquery.ElasticMain;
 import de.l3s.elasticquery.RelationSnapshot;
@@ -30,7 +31,7 @@ public class QueryUtils {
 	
 	public QueryUtils(RelationSnapshot relation, String eventAttributes, String obId, String subId, 
 			TimeStampUtils ts, RelationUtils relationUtils, PropertyUtils propertyUtils, 
-			ElasticMain es, Map<String,String> events,HashSet<String> pairRelationsRoletypeEntity) throws IOException {
+			ElasticMain es, Map<String,String> events,HashSet<String> pairRelationsRoletypeEntity,String queryType) throws IOException {
 		
 		this.relation = relation;
 		this.pairRelationsRoletypeEntity = pairRelationsRoletypeEntity;
@@ -39,14 +40,14 @@ public class QueryUtils {
 		this.obId = obId;
 		this.subId = subId;
 		relationSearch = new RelationSearch ("souza_eventkg_relations_all", es);
-		queryBuilder = new QueryBuilder (relationUtils, relation, propertyUtils, ts, eventAttributes);
+		queryBuilder = new QueryBuilder (relationUtils, relation, propertyUtils, ts, eventAttributes,queryType);
 		
 	}
 
 	public QueryUtils(RelationSnapshot relation1,RelationSnapshot relation2, String eventAttributes, String objectIdr1, String objectIdr2,
 			String subjectIdr1, String subjectIdr2,
 			TimeStampUtils ts, RelationUtils relationUtils, PropertyUtils propertyUtils, 
-			ElasticMain es, Map<String,String> events) throws IOException {
+			ElasticMain es, Map<String,String> events, String queryType) throws IOException {
 		
 		this.relation1 = relation1;
 		this.relation2 = relation2;
@@ -57,10 +58,14 @@ public class QueryUtils {
 		randomFilter = new RandomFilter ();
 		this.eventAttributes = eventAttributes;
 		relationSearch = new RelationSearch ("souza_eventkg_relations_all", es);
-		queryBuilder = new QueryBuilder (relationUtils, relation1,relation2, propertyUtils, ts, eventAttributes);
+		queryBuilder = new QueryBuilder (relationUtils, relation1,relation2, propertyUtils, ts, eventAttributes,queryType);
 		
 	}
 
+	public String getQueryType ()
+	{
+		return queryBuilder.getQueryType();
+	}
 	
 	public String getObId() {
 		return obId;
@@ -80,6 +85,11 @@ public class QueryUtils {
 		this.subId = subId;
 	}
 
+	
+	public void setPairRelationsRoletypeEntity(HashSet<String> pairRelationsRoletypeEntity) {
+		this.pairRelationsRoletypeEntity = pairRelationsRoletypeEntity;
+	}
+
 	public HashSet<String> getPairRelationsRoletypeEntity() {
 		return pairRelationsRoletypeEntity;
 	}
@@ -92,6 +102,8 @@ public class QueryUtils {
 	public String getQuerySubGraph (String node) throws IOException, InterruptedException
 	{
 		RelationSnapshot r2;
+		String roletyper1;
+		String roletyper2;
 		
 		if (node.contains("entity"))
 		{
@@ -99,14 +111,24 @@ public class QueryUtils {
 			
 			if (r2!=null)
 			{
-				if (pairRelationsRoletypeEntity.contains(relation.getRoleType() + " " +r2.getRoleType()))
+				StringTokenizer tokenr1 = new StringTokenizer (relation.getRoleType());
+	    		roletyper1 = tokenr1.nextToken();
+	    		roletyper1 = tokenr1.nextToken();
+	    		
+	    		StringTokenizer tokenr2 = new StringTokenizer (r2.getRoleType());
+	    		roletyper2 = tokenr2.nextToken();
+	    		roletyper2 = tokenr2.nextToken();
+				if (pairRelationsRoletypeEntity.contains(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType()))
 					return "";
 				else
-					pairRelationsRoletypeEntity.add(relation.getRoleType() + " " +r2.getRoleType());
+					pairRelationsRoletypeEntity.add(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType());
 			}
 			else return "";
 				
-			return queryBuilder.getQueryFromRelations(relation,r2);
+			pairRelationsRoletypeEntity.remove(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType());
+			query = queryBuilder.getQueryFromRelations(relation,r2);
+			pairRelationsRoletypeEntity.add(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType());
+			return query;
 		}
 		else
 			return queryBuilder.getQueryFromRelations(relation1,relation2);

@@ -77,7 +77,7 @@ public class QueryBuilder {
 	}
 
 	public QueryBuilder(RelationUtils relationUtils, RelationSnapshot relation, PropertyUtils propertyUtils, 
-			TimeStampUtils timestampUtils, String eventAttributes) {
+			TimeStampUtils timestampUtils, String eventAttributes, String queryType) {
 		
 		eventVar = "?event";
 		this.eventAttributes = eventAttributes;
@@ -109,18 +109,21 @@ public class QueryBuilder {
 		this.relationUtils = relationUtils;
 		this.propertyUtils = propertyUtils;
 		this.timestampUtils = timestampUtils;
+		this.queryType = queryType;
 		this.relation = relation;
 		client = new EventkgClient ();
 		queries = new ArrayList<String>();
 		assignedVars = new HashMap<String,String>();
 		allVars = new HashMap<String,String>();
 
-		
 	}
 
-	
+	public String getQueryType() {
+		return queryType;
+	}
+
 	public QueryBuilder(RelationUtils relationUtils, RelationSnapshot relation1, RelationSnapshot relation2, PropertyUtils propertyUtils, 
-			TimeStampUtils timestampUtils, String eventAttributes) {
+			TimeStampUtils timestampUtils, String eventAttributes, String queryType) {
 		
 		eventVar = "?event";
 		this.relation1 = relation1;
@@ -152,6 +155,7 @@ public class QueryBuilder {
 		
 		yearSelected  = "";
 		this.relationUtils = relationUtils;
+		this.queryType = queryType;
 		this.propertyUtils = propertyUtils;
 		this.timestampUtils = timestampUtils;
 		client = new EventkgClient ();
@@ -159,8 +163,8 @@ public class QueryBuilder {
 		assignedVars = new HashMap<String,String>();
 		allVars = new HashMap<String,String>();
 
-		
 	}
+	
 	
 	public int getQueryNumber() {
 		return queryNumber;
@@ -701,14 +705,8 @@ public class QueryBuilder {
 		String varSecondEntity = "";
 		String queryWithoutFilterTime;
 		ArrayList<String> variables = new ArrayList<String>();
-		ArrayList<String> queryTypes = new ArrayList<String>();
-		queryTypes.add("ask");
-		queryTypes.add("select");
-		queryTypes.add("count");
-		queryType = randomFilter.getRandomValue(queryTypes);
 		
-		queryType = "select";
-		
+		query = "";
 		if (queryType.contains("ask"))
 			selectClause = "ASK \n";
 		
@@ -788,6 +786,12 @@ public class QueryBuilder {
 			query = selectClause;
 		}
 		
+		if (queryType.contains("select"))
+		{
+			selectClause = selectClause + " WHERE {\n" + query;
+			query = selectClause;
+		}
+		
 		if (queryType.contains("count"))
 		{
 			
@@ -813,11 +817,6 @@ public class QueryBuilder {
 			query = selectClause;
 		}
 		
-		if (queryType.contains("select"))
-		{
-			selectClause = selectClause + " WHERE {\n" + query;
-			query = selectClause;
-		}
 		
 		testQuery ();
 		
@@ -835,7 +834,7 @@ public class QueryBuilder {
 			query = query + "\n} LIMIT 1\n";
 		
 		if (!query.isEmpty() && queryType.contains("count"))
-			query = query + "\n} LIMIT 1\n ORDER BY DESC(?count)";
+			query = query + "\n}\n ORDER BY DESC(?count)\nLIMIT 1";
 		
 		if (!query.isEmpty() && queryType.contains("ask"))
 			query = query + "\n}";
@@ -978,10 +977,11 @@ public class QueryBuilder {
 				query = query + "\n} LIMIT 1\n";
 			
 			if (!query.isEmpty() && queryType.contains("count"))
-				query = query + "\n} LIMIT 1\n ORDER BY DESC(?count)";
+				query = query + "\n} \nORDER BY DESC(?count)";
 			
 			if (!query.isEmpty() && queryType.contains("ask"))
-				query = query + "\n}";
+				return query;
+			
 			return query;
 		
 	}
@@ -1022,12 +1022,12 @@ public class QueryBuilder {
 		
 		if (queryType.contains("count"))
 		{
-			queryWithoutTs = query + "\n} LIMIT 1 \n ORDER BY DESC(?count)";
-			query = query + filterTime + "\n} LIMIT 1 \n ORDER BY DESC(?count) ";
+			queryWithoutTs = query + "\n}\nORDER BY DESC(?count)\nLIMIT 1";
+			query = query + filterTime + "\n}\nORDER BY DESC(?count)\nLIMIT 1 ";
 		
 			if (client.hasResult(query))
 			{	
-				query = query.replaceAll("\n} LIMIT 1 \n ORDER BY DESC(?count)", "");
+				query = query.replaceAll("\n}\nORDER BY DESC\\(\\?count\\)\nLIMIT 1", "");
 				filterTime = "";
 				return;
 			}
@@ -1037,7 +1037,7 @@ public class QueryBuilder {
 					if (client.hasResult(queryWithoutTs))
 					{
 						query = queryWithoutTs;
-						query = query.replaceAll("\n} LIMIT 1 \n ORDER BY DESC(?count)", "");
+						query = query.replaceAll("\n}\nORDER BY DESC\\(\\?count\\)\nLIMIT 1", "");
 						filterTime = "";
 						return;
 					}
@@ -1047,7 +1047,7 @@ public class QueryBuilder {
 				}
 		
 			if (!query.isEmpty())
-				query = query.replaceAll("\n} LIMIT 1 \n ORDER BY DESC(?count)", "");
+				query = query.replaceAll("\n}\nORDER BY DESC\\(\\?count\\)\nLIMIT 1", "");
 			filterTime = "";
 		}
 		
