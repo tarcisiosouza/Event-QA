@@ -1,15 +1,12 @@
 package de.l3s.souza.EventKG.queriesGenerator;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.StringTokenizer;
 
 import de.l3s.elasticquery.ElasticMain;
-import de.l3s.elasticquery.RelationSnapshot;
+import de.l3s.souza.EventKG.queriesGenerator.relation.RelationSnapshot;
+import de.l3s.souza.EventKG.queriesGenerator.relation.RelationUtils;
 
 public class QueryUtils {
 	
@@ -31,7 +28,7 @@ public class QueryUtils {
 	
 	public QueryUtils(RelationSnapshot relation, String eventAttributes, String obId, String subId, 
 			TimeStampUtils ts, RelationUtils relationUtils, PropertyUtils propertyUtils, 
-			ElasticMain es, Map<String,String> events,HashSet<String> pairRelationsRoletypeEntity,String queryType) throws IOException {
+			ElasticMain es, Map<String,String> events,HashSet<String> pairRelationsRoletypeEntity,String queryType,Map<String,String> typesEntities,int generated) throws IOException {
 		
 		this.relation = relation;
 		this.pairRelationsRoletypeEntity = pairRelationsRoletypeEntity;
@@ -40,14 +37,14 @@ public class QueryUtils {
 		this.obId = obId;
 		this.subId = subId;
 		relationSearch = new RelationSearch ("souza_eventkg_relations_all", es);
-		queryBuilder = new QueryBuilder (relationUtils, relation, propertyUtils, ts, eventAttributes,queryType);
+		queryBuilder = new QueryBuilder (relationUtils, relation, propertyUtils, ts, eventAttributes,queryType,typesEntities,generated);
 		
 	}
 
 	public QueryUtils(RelationSnapshot relation1,RelationSnapshot relation2, String eventAttributes, String objectIdr1, String objectIdr2,
 			String subjectIdr1, String subjectIdr2,
 			TimeStampUtils ts, RelationUtils relationUtils, PropertyUtils propertyUtils, 
-			ElasticMain es, Map<String,String> events, String queryType) throws IOException {
+			ElasticMain es, Map<String,String> events, String queryType,Map<String,String> typesEntities,int generated) throws IOException {
 		
 		this.relation1 = relation1;
 		this.relation2 = relation2;
@@ -58,7 +55,7 @@ public class QueryUtils {
 		randomFilter = new RandomFilter ();
 		this.eventAttributes = eventAttributes;
 		relationSearch = new RelationSearch ("souza_eventkg_relations_all", es);
-		queryBuilder = new QueryBuilder (relationUtils, relation1,relation2, propertyUtils, ts, eventAttributes,queryType);
+		queryBuilder = new QueryBuilder (relationUtils, relation1,relation2, propertyUtils, ts, eventAttributes,queryType,typesEntities,generated);
 		
 	}
 
@@ -67,6 +64,10 @@ public class QueryUtils {
 		return queryBuilder.getQueryType();
 	}
 	
+	public String getNaturalLanguage ()
+	{
+		return queryBuilder.getNaturalLanguage();
+	}
 	public String getObId() {
 		return obId;
 	}
@@ -101,105 +102,12 @@ public class QueryUtils {
 	
 	public String getQuerySubGraph (String node) throws IOException, InterruptedException
 	{
-		RelationSnapshot r2;
-		String roletyper1;
-		String roletyper2;
-		
-		if (node.contains("entity"))
-		{
-			r2 = subGraphWalk (node);
-			
-			if (r2!=null)
-			{
-				StringTokenizer tokenr1 = new StringTokenizer (relation.getRoleType());
-	    		roletyper1 = tokenr1.nextToken();
-	    		roletyper1 = tokenr1.nextToken();
-	    		
-	    		StringTokenizer tokenr2 = new StringTokenizer (r2.getRoleType());
-	    		roletyper2 = tokenr2.nextToken();
-	    		roletyper2 = tokenr2.nextToken();
-				if (pairRelationsRoletypeEntity.contains(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType()))
-					return "";
-				else
-					pairRelationsRoletypeEntity.add(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType());
-			}
-			else return "";
-				
-			pairRelationsRoletypeEntity.remove(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType());
-			query = queryBuilder.getQueryFromRelations(relation,r2);
-			pairRelationsRoletypeEntity.add(roletyper1 + " " +roletyper2 + " " + queryBuilder.getQueryType());
-			return query;
-		}
-		else
-			return queryBuilder.getQueryFromRelations(relation1,relation2);
+		return queryBuilder.getQueryFromRelations(relation1,relation2);
 	}
 	
 	public String getQuery ()
 	{
 		return query;
-	}
-
-	public RelationSnapshot subGraphWalk (String node) throws IOException
-	{
-		RelationSnapshot chosenRelation = null;
-		Map<String, RelationSnapshot> subgraphRelations = new HashMap<String,RelationSnapshot> ();
-		Map<String, RelationSnapshot> subgraphRelationsDbo = new HashMap<String,RelationSnapshot> ();
-
-		if (node.contains("entity"))
-		{
-			if (obId.contains(node))
-			{
-			 
-				relationSearch.setField("object");
-				relationSearch.setKeyword(obId);
-				relationSearch.setLimit(1000);
-				subgraphRelations = relationSearch.getRelations();
-			
-				if (subgraphRelations.isEmpty())
-				{
-					relationSearch.setField("subject");
-					subgraphRelations = relationSearch.getRelations();
-				}
-			
-			}	
-			
-			if (subId.contains(node))
-			{
-			  if (node.contentEquals("entity"))
-			  {
-				relationSearch.setField("object");
-				relationSearch.setKeyword(subId);
-				subgraphRelations = relationSearch.getRelations();
-				if (subgraphRelations.isEmpty())
-				{
-					relationSearch.setField("subject");
-					subgraphRelations = relationSearch.getRelations();	
-				}
-				
-			  }
-				
-			}
-			
-		}
-			if (!(subgraphRelations.isEmpty()))
-			{
-				
-				for (Entry<String,RelationSnapshot> entry : subgraphRelations.entrySet())
-				{
-					RelationSnapshot snapshot = entry.getValue();
-					if (snapshot.getRoleType().contains("dbo"))
-					{
-						subgraphRelationsDbo.put(entry.getKey(), snapshot);
-					}
-						
-				}
-				
-				if (!subgraphRelationsDbo.isEmpty())
-					chosenRelation = randomFilter.getRandomValue(subgraphRelationsDbo);
-			}
-			
-			return chosenRelation;
-				
 	}
 
 	public String getQueryName() {

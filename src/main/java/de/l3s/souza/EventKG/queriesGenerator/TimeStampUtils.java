@@ -1,19 +1,24 @@
 package de.l3s.souza.EventKG.queriesGenerator;
 
 import java.io.IOException;
+import de.l3s.souza.EventKG.queriesGenerator.nlp.NlpConversion;
+import de.l3s.souza.EventKG.queriesGenerator.nlp.TimeFilterSnapshot;
 
 public class TimeStampUtils {
 
 	private static PropertyUtils propertyUtils;
 	private static String queryName;
 	private static String filterTime;
+	private TimeFilterSnapshot timeFilterSnapshot;
 	
 	public TimeStampUtils( PropertyUtils propertyUtils) {
 		
 		queryName = "";
+		
 		this.propertyUtils = propertyUtils;
 		filterTime = "";
 	}
+	
 	
 	public static String getQueryName() {
 		return queryName;
@@ -57,16 +62,18 @@ public class TimeStampUtils {
 			startTimeVar, String endTimeVar, String beginTimeStampValue, String endTimeStampValue
 			, String beginYearTimeStamp, String last, String yearSelected, String eventAttrib)
 	{
-		queryName = "";
+		queryName = "filter in ";
+		
 		try {
 			if (!beginTimeStampPred.isEmpty())
 			{
+				
 				switch (periodSelected)
 				{
 					case "sameStartTime":
 					{
 						if (!EventDecisionSelected.contains("specific"))
-						queryName = queryName + " at the day " + beginTimeStampValue;
+						queryName = queryName + startTimeVar.replaceAll("StartTime", "") + ": happened at the day " + beginTimeStampValue;
 						filterTime = "FILTER ("+startTimeVar + " = "+beginTimeStampValue + ")";
 						break;
 					}
@@ -75,9 +82,9 @@ public class TimeStampUtils {
 						if (!EventDecisionSelected.contains("specific"))
 						{	
 							if (!endTimeStampValue.isEmpty())
-								queryName = queryName + " from  " + beginTimeStampValue + " and  " + endTimeStampValue;
+								queryName = queryName + startTimeVar.replaceAll("StartTime", "") + ": happened from  " + beginTimeStampValue + " and  " + endTimeStampValue;
 							else
-								queryName = queryName + " in  " + beginTimeStampValue;
+								queryName = queryName + startTimeVar.replaceAll("StartTime", "") + ": in  " + beginTimeStampValue;
 
 						}
 						
@@ -95,7 +102,7 @@ public class TimeStampUtils {
 					case "before":
 					{
 						if (!EventDecisionSelected.contains("specific"))
-						queryName = queryName + " before  " + beginTimeStampValue ;
+						queryName = queryName + startTimeVar.replaceAll("StartTime", "") +": happened before  " + beginTimeStampValue ;
 
 						if (!endTimeStampValue.isEmpty())
 							filterTime = "FILTER ("+startTimeVar + " < "+beginTimeStampValue + " && "+endTimeVar + " < " + beginTimeStampValue+")\n";
@@ -112,13 +119,13 @@ public class TimeStampUtils {
 						{
 							filterTime = "FILTER ("+startTimeVar + " > "+endTimeStampValue + ")\n";
 							if (!EventDecisionSelected.contains("specific"))
-								queryName = queryName + " after  " + endTimeStampValue ;
+								queryName = queryName + startTimeVar.replaceAll("StartTime", "") +": after  " + endTimeStampValue ;
 						}	
 						else
 						{
 							filterTime = "FILTER ("+startTimeVar + " > "+beginTimeStampValue + ")\n";
 							if (!EventDecisionSelected.contains("specific"))
-							queryName = queryName + " has started after  " + beginTimeStampValue ;
+							queryName = queryName + startTimeVar.replaceAll("StartTime", "") +" has started after  " + beginTimeStampValue ;
 						}
 						break;
 					}
@@ -130,7 +137,7 @@ public class TimeStampUtils {
 						int pastYear = beginYear - diff;
 						
 						if (!EventDecisionSelected.contains("specific"))
-						 queryName = queryName + " last " + diff +" years ago" ;
+						 queryName = queryName + startTimeVar.replaceAll("StartTime", "") +" last " + diff +" years ago" ;
 						beginTimeStampValue = "\""+pastYear+"-01-01\"^^xsd:date";
 						endTimeStampValue = "\""+beginYear+"-01-01\"^^xsd:date";
 						if (!endTimeStampValue.isEmpty())
@@ -151,7 +158,7 @@ public class TimeStampUtils {
 						int endYear = beginYear + 1;
 						
 						if (!EventDecisionSelected.contains("specific"))
-							queryName = queryName + " in " + beginYear ;
+							queryName = queryName + startTimeVar.replaceAll("StartTime", "") +" happened in " + beginYear ;
 						beginTimeStampValue = "\""+beginYear+"-01-01\"^^xsd:date";
 						endTimeStampValue = "\""+endYear+"-01-01\"^^xsd:date";
 						
@@ -175,6 +182,25 @@ public class TimeStampUtils {
 		return filterTime;
 		
 		
+	}
+	
+	public boolean isYearString (String str)
+	{
+		 String text = "";
+		    text = str.replaceAll("[^0-9]", "#"); //simple solution for replacing all non digits. 
+		    String[] arr = text.split("#");
+
+		    boolean hasYear = false;
+		  
+		    for(String s : arr){
+		        if(s.matches("^[0-9]{4}$")){
+		            hasYear = true;
+		            break;
+		           
+		        }
+		    }
+		    
+		return hasYear;
 	}
 	
 	

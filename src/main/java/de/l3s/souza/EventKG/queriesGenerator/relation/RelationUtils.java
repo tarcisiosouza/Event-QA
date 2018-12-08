@@ -1,9 +1,9 @@
-package de.l3s.souza.EventKG.queriesGenerator;
+package de.l3s.souza.EventKG.queriesGenerator.relation;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import de.l3s.elasticquery.RelationSnapshot;
+import de.l3s.souza.EventKG.queriesGenerator.PropertyUtils;
 
 public class RelationUtils {
 	
@@ -211,4 +211,38 @@ public class RelationUtils {
 		
 	}
 	
+	private RelationSnapshot getEventAttributeValues (RelationSnapshot relation)
+	{
+		RelationSnapshot r = relation;
+		String attrib = r.getAttributes();
+		
+		StringTokenizer tokenAttrib = new StringTokenizer (attrib,"\n");
+		
+		while (tokenAttrib.hasMoreElements())
+		{
+			String nextAttrib = tokenAttrib.nextToken();
+			if (nextAttrib.contains("nextEvent") || nextAttrib.contains("previousEvent"))
+			{
+				
+			}
+		}
+		return r;
+	}
+	public RelationSnapshot addNodeRelation (String nodeType, RelationSnapshot relation,String nodeId, String varName) throws IOException
+	{
+		RelationSnapshot r = relation;
+		
+		String nodeLabel = propertyUtils.getLabelFirstEnglishEntity(nodeId);
+		String attributes = propertyUtils.getAttributes(nodeId);
+		Node node = new Node (nodeType,nodeLabel,varName);
+		node.setAttributes(attributes);
+	/*	
+		if (nodeType.contains("event"))
+			r = getEventAttributeValues (r);
+		*/
+		r.addNode(node);
+		
+		return r;
+		
+	}
 }

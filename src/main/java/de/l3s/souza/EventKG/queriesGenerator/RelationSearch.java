@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import de.l3s.elasticquery.ElasticMain;
-import de.l3s.elasticquery.RelationSnapshot;
+import de.l3s.souza.EventKG.queriesGenerator.relation.RelationSnapshot;
 
 public class RelationSearch {
 
@@ -31,18 +31,6 @@ public class RelationSearch {
 		this.es = es;
 	}
 
-	public Map<String, RelationSnapshot> getRelations () throws IOException
-	{
-		es.setField(field);
-		es.setKeywords(keyword);
-		es.setIndexName(indexName);
-		es.setRandomSearch(false);
-		es.setLimit(limit);
-		es.run();
-		results = es.getRelationMap();
-		return results;
-	}
-	
 	public String getField() {
 		return field;
 	}

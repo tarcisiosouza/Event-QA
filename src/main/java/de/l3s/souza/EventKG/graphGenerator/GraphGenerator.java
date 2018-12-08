@@ -41,8 +41,6 @@ public class GraphGenerator
 	private static ElasticMain es;
 	private static ElasticMain es2;
 	
-	
-
 	private static Map<String,ElementVertex> idVertex = new HashMap<String,ElementVertex> ();
 	private static Graph<ElementVertex, RelationshipEdge> EventKG = new Multigraph<ElementVertex, RelationshipEdge>(RelationshipEdge.class);
 	private static HashMap<String,Entity> entities = new HashMap<String,Entity>();

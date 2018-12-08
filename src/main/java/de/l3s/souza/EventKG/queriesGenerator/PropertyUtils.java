@@ -147,7 +147,6 @@ public class PropertyUtils {
 	 		
 	 			for (Entry<String,String> entry : document.entrySet())
 	 			{
-	 			
 	 				String value = entry.getValue();
 	 				StringTokenizer tokenValue = new StringTokenizer (value,"\n");
 	 			
@@ -197,6 +196,35 @@ public class PropertyUtils {
 		
 		return entityLabel;
 	}
+	
+	public String getTextLabelFirstEnglishEntity (String id) throws IOException //return the first label in other language if @en is not in there
+	{
+		
+		String entityId;
+		String entityLabel = "";
+		int i = 0;
+		
+			es.setKeywords(id);
+	 		es.setIndexName("souza_eventkg");
+	 		es.setRandomSearch(false);
+	 		es.setLimit(1);
+	 		es.run();
+	 		
+	 			Map<String,String> document = es.getGenericDocuments();
+	 		
+	 			entityLabel = getLabelFromDocument (document, "@en");
+	 			if (entityLabel.isEmpty())
+ 				{
+		 			entityLabel = getLabelFromDocument (document, " ");
+ 				}
+		
+	 	final Pattern pattern = Pattern.compile("\"(.+?)\"");
+		final Matcher matcher = pattern.matcher (entityLabel);
+		matcher.find();
+		entityLabel = matcher.group(1);
+		return entityLabel;
+	}
+	
 	
 	private static String getLabelFromDocument (Map<String,String> doc, String language)
 	{

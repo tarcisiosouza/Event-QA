@@ -20,7 +20,12 @@ public class EventkgClient {
 
 	private boolean hasException;
 	private String lines;
+	private int valueCount;
 	
+	public int getValue() {
+		return valueCount;
+	}
+
 	public EventkgClient() {
 		hasException = false;
 		lines = "";
@@ -67,7 +72,7 @@ public class EventkgClient {
 			    executor.shutdown();            //        <-- reject all further submissions
 
 			    try {
-			        future.get(1, TimeUnit.SECONDS);  //     <-- wait 2 seconds to finish
+			        future.get(5, TimeUnit.SECONDS);  //     <-- wait 2 seconds to finish
 			    } catch (InterruptedException e) {    //     <-- possible error cases
 			        System.out.println("job was interrupted");
 			    } catch (ExecutionException e) {
@@ -79,7 +84,7 @@ public class EventkgClient {
 			    }
 
 			    // wait all unfinished tasks for 2 sec
-			    if(!executor.awaitTermination(1, TimeUnit.SECONDS)){
+			    if(!executor.awaitTermination(5, TimeUnit.SECONDS)){
 			        // force them to quit by interrupting
 			        executor.shutdownNow();
 			    }
@@ -96,9 +101,28 @@ public class EventkgClient {
 				return true;
 			
 			JSONObject json = new JSONObject(lines);
-
+			
 			JSONArray arr = json.getJSONObject("results").getJSONArray("bindings");
-
+		
+			if (arr.toString().contains("{\"count\":"))
+			try {
+				
+				for (int i=0; i<arr.length(); i++)
+				{
+				    JSONObject node = arr.getJSONObject(i);     
+				    valueCount = node.getJSONObject("count").getInt("value");
+				}
+			} catch (Exception e)
+			{
+		
+			}			 
+			/*for (Object o : arr) {
+		        JSONObject jsonLineItem = (JSONObject) o;
+		        String key = jsonLineItem.getString("key");
+		        String value = jsonLineItem.getString("value");
+		        
+		    }*/
+			
 			if (arr.toString().contains("http://eventKG.l3s.uni-hannover.de/") || arr.toString().contains("http://www.w3.org")) {
 
 				return true;
@@ -121,6 +145,10 @@ public class EventkgClient {
 		return hasException;
 	}
 	
+	private static String GetJSONValue(String JSONString, String Field)
+	{
+	       return JSONString.substring(JSONString.indexOf(Field), JSONString.indexOf("\n", JSONString.indexOf(Field))).replace(Field+"\": \"", "").replace("\"", "").replace(",","");   
+	}
 	private void readLines(String uri) throws InterruptedException {
 
 		lines = "";

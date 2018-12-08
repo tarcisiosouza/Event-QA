@@ -28,8 +28,9 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.l3s.souza.EventKG.queriesGenerator.Snapshot;
-import de.l3s.elasticquery.RelationSnapshot;
-import de.l3s.souza.EventKG.queriesGenerator.RelationUtils;
+import de.l3s.souza.EventKG.queriesGenerator.relation.RelationSnapshot;
+import de.l3s.souza.EventKG.queriesGenerator.relation.RelationUtils;
+
 
 public class IndexRelations {
 
@@ -39,16 +40,25 @@ public class IndexRelations {
 	private static Client client;
 	private static Map<String, RelationSnapshot> data = new HashMap<String, RelationSnapshot>();
 	private static Map<String, String> events = new HashMap<String, String>();
+	private static Map<String, String> entities = new HashMap<String, String>();
 	private static Map<String, String> eventsMultipleRelations = new HashMap<String, String>();
 	private static HashSet<String> dbos = new HashSet<String>();
 	private static String currentEvent;
+	private static StringBuilder sb = new StringBuilder();
+
 	private static Map<String, String> dataToIndex = new HashMap<String, String>();
 
 	private static BulkRequestBuilder bulkBuilder;
 	private static long bulkBuilderLength;
 	
+	public static StringBuilder getSb() {
+		return sb;
+	}
 	
-	
+	public Map<String, String> getEntities() {
+		return entities;
+	}
+
 	public static HashSet<String> getDbos() {
 		return dbos;
 	}
@@ -225,14 +235,12 @@ public class IndexRelations {
 		}
 		
 		
-		public Map<String,RelationSnapshot> getRelationRecords(BufferedReader br) throws IOException
+		public Map<String,RelationSnapshot> getRelationRecords(BufferedReader br,String nodeType) throws IOException
 		{
 			String line = "";
 			String relationId = "";
 			String predicateRelation = "";
 			String relationsEvent = "";
-
-			Snapshot relation;
 			
 			while ((line=br.readLine())!=null)
 	    	{
@@ -256,11 +264,14 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "subject");
-					if (line.contains("<event_"))
+				//	if (line.contains("<event_"))
+					if (line.contains(nodeType))
 	    			{
 	    				StringTokenizer tokenLine = new StringTokenizer (line);
 	    				tokenLine.nextToken();
 	    				tokenLine.nextToken();
+	    			   if (nodeType.contains("event"))
+	    			   {
 	    				currentEvent = tokenLine.nextToken();
 	    				
 	    					if (events.containsKey(currentEvent))
@@ -274,6 +285,23 @@ public class IndexRelations {
 	    					{
 	    						events.put(currentEvent, relationId);
 	    					}
+	    			   }
+	    			   else
+	    			   {
+	    				   currentEvent = tokenLine.nextToken();
+		    				
+	    					if (entities.containsKey(currentEvent))
+	    					{
+	    						relationsEvent = entities.get(currentEvent);
+	    						relationsEvent = relationsEvent + " " + relationId;
+	    						entities.put(currentEvent, relationsEvent);
+	    						
+	    					}
+	    					else
+	    					{
+	    						entities.put(currentEvent, relationId);
+	    					}
+	    			   }
 	    			 }
 
 				}
@@ -285,7 +313,6 @@ public class IndexRelations {
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "owl");
 
-
 				}
 	    		
 	    		if (line.contains("rdfs:label"))
@@ -295,24 +322,24 @@ public class IndexRelations {
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "label");
 
-
 				}
 	    		
 	    		if (line.contains("rdf:object"))
 				{   	
 	    			
-	    			
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "object");
 					
-					if (line.contains("<event_"))
+					if (line.contains(nodeType))
 	    			{
 	    				StringTokenizer tokenLine = new StringTokenizer (line);
 	    				tokenLine.nextToken();
 	    				tokenLine.nextToken();
 	    				currentEvent = tokenLine.nextToken();
 	    				
+	    				if (nodeType.contains("event"))
+	    				{
 	    					if (events.containsKey(currentEvent))
 	    					{
 	    						relationsEvent = events.get(currentEvent);
@@ -324,6 +351,22 @@ public class IndexRelations {
 	    					{
 	    						events.put(currentEvent, relationId);
 	    					}
+	    				}
+	    				else
+	    				{
+	    					
+	    					if (entities.containsKey(currentEvent))
+	    					{
+	    						relationsEvent = entities.get(currentEvent);
+	    						relationsEvent = relationsEvent + " " + relationId;
+	    						entities.put(currentEvent, relationsEvent);
+	    						
+	    					}
+	    					else
+	    					{
+	    						entities.put(currentEvent, relationId);
+	    					}
+	    				}
 	    			 }
 
 				}
@@ -347,16 +390,11 @@ public class IndexRelations {
 	    		
 	    		if (line.contains("sem:roleType"))
 				{
-	    			/*if (line.contains("dbo:"))
-	    			{*/
+	    			
 	    				relationId = tokenRelations.nextToken();
 	    				predicateRelation = line.replaceAll(relationId + " ", "");
 						updateMap (relationId, predicateRelation, "roletype");
 		
-	    		/*	}
-	    			else
-	    				data.remove(relationId);
-			*/
 				}
 	    	}
 			
@@ -373,6 +411,7 @@ public class IndexRelations {
 			Snapshot relation;
 			String currentRecord = "";
 			String idRecord = "";
+			String currentIdRecord = "";
 			while ((line=br.readLine())!=null)
 	    	{
 	    		
@@ -381,7 +420,8 @@ public class IndexRelations {
 	    		
 	    		StringTokenizer tokenRelations = new StringTokenizer (line);
 	    		StringTokenizer tokenRelationId = new StringTokenizer (line);
-	    	
+	    		currentIdRecord = tokenRelationId.nextToken();
+	    		
 	    		if (line.contains("rdf:type"))
 				{
 					relationId = tokenRelations.nextToken();
@@ -396,7 +436,7 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "subject");
-					currentRecord = currentRecord + line;
+					
 
 				}
 	    		
@@ -406,7 +446,6 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "owl");
-					currentRecord = currentRecord + line;
 
 				}
 	    		
@@ -425,7 +464,6 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "object");
-					currentRecord = currentRecord + line;
 
 				}
 	    		
@@ -442,20 +480,15 @@ public class IndexRelations {
 	    			relationId = tokenRelations.nextToken();
 					predicateRelation = line.replaceAll(relationId + " ", "");
 					updateMap (relationId, predicateRelation, "begintimestamp");
-					currentRecord = currentRecord + line;
 				}
 	    		
 	    		
 	    		if (line.contains("sem:roleType"))
 				{
-	    			if (line.contains("dbo:"))
-	    			{
+	    			
 	    				relationId = tokenRelations.nextToken();
 	    				predicateRelation = line.replaceAll(relationId + " ", "");
 						updateMap (relationId, predicateRelation, "roletype");
-						currentRecord = currentRecord + line;
-	    			}
-	    			else
 	    				data.remove(relationId);
 			
 				}
@@ -475,18 +508,18 @@ public class IndexRelations {
 	    	
 		}
 		
-		public Map<String,RelationSnapshot> getNewRelationIndex (String path) throws IOException
+		public Map<String,RelationSnapshot> getNewRelationIndex (String path,String nodeType) throws IOException
 		{
 			Map<String,RelationSnapshot> output = new HashMap<String,RelationSnapshot>();
-			data.clear();
+			//data.clear();
 			File fileRelations = new File (path);
 	    	FileReader frRelations = new FileReader (fileRelations);
 	    	BufferedReader brRelations = new BufferedReader (frRelations);
 	    	
-	    	if (path.contains("relations_entities_other"))
+	   /* 	if (path.contains("relations_entities_other"))
 	    		output =  getRelationEntitiesRecords (brRelations);
-	    	else
-	    		output =  getRelationRecords (brRelations);
+	    	else*/
+	    		output =  getRelationRecords (brRelations,nodeType);
 	    	brRelations.close();
 	    	return output;
 	    	
