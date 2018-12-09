@@ -45,8 +45,6 @@ format=json
 
 #### Input data 
 
-The input data files are available in the directory [input](input/) as ".nq" extension. Copy them to your home folder and
-specify the path  in the config.properties file. The files are composed of dbpedia predicates and relations, where:
 
 Name | Description
 :-----|:-------------
