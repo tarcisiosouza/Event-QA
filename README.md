@@ -44,6 +44,8 @@ format=json
 ```
 
 #### Input data 
+The input data files are compressed in one file "input.z". Extract them to your home folder and
+specify the path in the config.properties file. The files are composed of dbpedia predicates and relations, where:
 
 
 Name | Description
