@@ -64,7 +64,7 @@ The parameter "format" is the output format of the queries.
 In order to generate the queries, please follow the steps:
 
 - **Clone** this project in your computer
-- **Enter** in project directory and execute:
+- **Enter** in the project directory and execute:
 ```
 mvn clean package
 ```
