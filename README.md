@@ -84,7 +84,7 @@ java -jar EventKG.graphGenerator-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 
 #### Output
 
-As a sample example, we show the semantic queries in a [human readable](http://eventcqa.l3s.uni-hannover.de/queries_human.html) and [machine readable](http://eventcqa.l3s.uni-hannover.de/queries_machine.json) form. 
+As an example, we show the semantic queries in a [human readable](http://eventcqa.l3s.uni-hannover.de/queries_human.html) and [machine readable](http://eventcqa.l3s.uni-hannover.de/queries_machine.json) form. 
 
 #### License ####
 
