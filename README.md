@@ -82,6 +82,9 @@ java -jar EventKG.graphGenerator-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 - **Wait** until the program concludes the execution
 - **Output** is the file  "queries.nq" with the queries generated
 
+#### Output
+
+As a sample example, we show the semantic queries in a [human readable](queries_human.html) and [machine readable](queries_machine.json) form. 
 
 #### License ####
 
