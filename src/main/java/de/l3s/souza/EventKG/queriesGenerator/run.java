@@ -1,13 +1,9 @@
 package de.l3s.souza.EventKG.queriesGenerator;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.StringTokenizer;
+
 import de.l3s.souza.EventKG.graphGenerator.IndexRelations;
 import de.l3s.souza.EventKG.graphGenerator.IndexTypes;
 import de.l3s.souza.EventKG.queriesGenerator.relation.RelationSnapshot;
@@ -25,7 +22,8 @@ public final class run {
 
 	private static HashSet<String> pairRelationsRoletypeEvent = new HashSet<String>(); 
 	private static HashSet<String> pairRelationsRoletypeEntity ;
-
+	private ArrayList<String> jsonQueries = new ArrayList<String> ();
+	
 	private static BufferedWriter out ;
 
 	private static HashSet<Integer> generatedKeys = new HashSet<Integer>();
@@ -33,7 +31,6 @@ public final class run {
 
 	private static String query = "";
 
-	private static StringBuilder sb ;
 	private static int generated = 0;
 	private static Map<String,String> entitiesEvents = new HashMap<String,String>();
 	private static Map<String,String> events = new HashMap<String,String>();
@@ -59,14 +56,17 @@ public final class run {
 	private static String subjectIdr1 = "";
 	private static String subjectIdr2 = "";
 	private static String queryType;
-
+	private static PropertiesManager pm;
+	private static ArrayList<String> queriesCreated ;
+	
 	public static void main (String args[]) throws IOException, InterruptedException
 	{
-		PropertiesManager pm = new PropertiesManager ();
 		
+		pm = new PropertiesManager ();
 		System.out.println("Reading data...");
 		IndexTypes indexTypes = new IndexTypes ();
 		typesEntities = indexTypes.getMap(pm.getDataFolder());
+		queriesCreated = new ArrayList<String> ();
 		
 		indexRelations = new IndexRelations ();
 		randomFilter = new RandomFilter ();
@@ -82,48 +82,12 @@ public final class run {
 	
 		System.out.println("Size rel: " + RelationsIndex.size());
 		System.out.println("Reading completed!");
-		
-		File fileWd = new File (pm.getDataFolder()+"property_labels.nq");
-		FileReader fileWdR = new FileReader (fileWd);
-		BufferedReader brFileWdR = new BufferedReader (fileWdR);
-		/*
-		String lineBrFileWdR= "";
-		
-		while ((lineBrFileWdR = brFileWdR.readLine())!=null)
-		{
-			if (lineBrFileWdR.contains("@prefix") || lineBrFileWdR.contains("@base") || lineBrFileWdR.isEmpty() )
-    			continue;
-			
-			String wdId = "";
-			String wdValue = "";
-			StringTokenizer tokenWdt = new StringTokenizer (lineBrFileWdR);
-    		
-    		if (lineBrFileWdR.contains("wdt"))
-			{
-				wdId = tokenWdt.nextToken();
-				wdValue = lineBrFileWdR.replaceAll(wdId + " ", "" ) + "\n";
-				if (wikidataProp.containsKey(wdId))
-				{
-					String currentWdValue = wikidataProp.get(wdId);
-					currentWdValue = currentWdValue + wdValue;
-					wikidataProp.put(wdId, currentWdValue);
-				}
-				else
-					wikidataProp.put(wdId, wdValue);
-
-			
-			}
-		}
-	*/
+	
 		relationsKeySet = new ArrayList<>(RelationsIndex.keySet());
 		relationsKeySetEntities = new ArrayList<>(eventsFromRelationsOther.keySet());
-		sb = new StringBuilder ();
+		
 		out = new BufferedWriter
 			    (new OutputStreamWriter(new FileOutputStream("queries.nq"),"UTF-8"));
-		
-	//	es = new ElasticMain("souza_eventkg", 1);
-    //	es2 = new ElasticMain("", 1, "entityid","souza_eventkg");
-   // 	es.setIndexName("souza_eventkg");
 		
     	propertyUtils = new PropertyUtils ();
     	timeStampUtils = new TimeStampUtils (propertyUtils);
@@ -133,7 +97,27 @@ public final class run {
     	
 		 System.out.print("keys generated! Building queries...");
 		 
-		 out.write (sb.toString());
+		 JsonQueryManager jsonQuery = new JsonQueryManager ();
+		 
+		 out.write(jsonQuery.getHeadJson());
+		 
+		 for (int i=0;i<queriesCreated.size();i++)
+		 {
+			 String currentQuery = queriesCreated.get(i);
+			 if (i+1==queriesCreated.size())
+			 {
+				 currentQuery = currentQuery.replaceAll("},", "}");
+				 out.write(currentQuery);
+			 }
+			 else
+			 {
+				 out.write(currentQuery);
+			 }
+				 
+		 }
+		
+		 out.write(jsonQuery.getEndJson());
+		 
 		 out.close();
 
 		 System.out.print("Finished!");
@@ -544,33 +528,28 @@ public final class run {
 
 		queryUtils = new QueryUtils (r1,r2, eventAttrib, objectIdr1, objectIdr2,subjectIdr1, subjectIdr2, timeStampUtils, relationUtils, 
 					propertyUtils,eventsFromRelationsOther,queryType,typesEntities,generated); 
-	  
-		HashSet<String> queriesCreated = new HashSet<String> ();
-		
+	  	
 		queryType = queryUtils.getQueryType();
 		
 		query = queryUtils.getQuerySubGraph(node);
 		String nl = "" ;
 		if (!query.isEmpty())
 			nl = queryUtils.getNaturalLanguage();
+		JsonQueryManager jsonQueryManager = new JsonQueryManager ();
+		QueryCleaner cleanQuery = new QueryCleaner ();
 		
 		if (!query.isEmpty() && query.length()>400)
 		{
-			//query = query.replaceAll("LIMIT 1", "");
 			
-			query = URLEncoder.encode(prefix + query, "UTF-8") ;
-			
-		/*	if (!nl.isEmpty())
-			{	*/
-			nl = "#NaturalLanguage:\n"+nl;
-			nl = URLEncoder.encode(nl, "UTF-8") ;
-			sb.append("#Query number: " + generated + "\n");
-			sb.append(query + "\n");
-			
-			sb.append(nl+"\n");
-			queriesCreated.add(query); 
 			generated ++;
-			//}
+			query = query.replaceAll("LIMIT 1", "");
+			
+			query = cleanQuery.getCleanQuery(query);
+			query = query.replaceAll("\n", "");
+			query  = jsonQueryManager.getJsonQuery(query, generated);
+			
+			queriesCreated.add(query); 
+		
 		}
 				
 	}
