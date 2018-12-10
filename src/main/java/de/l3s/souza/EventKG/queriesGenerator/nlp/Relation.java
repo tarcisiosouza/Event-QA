@@ -7,6 +7,9 @@ public class Relation {
 	private Entity subject;
 	private String id;
 	
+	private String objectString;
+	private String subjectString;
+	
 	public Relation(String roleType, Entity object, Entity subject,String id) {
 		
 		this.roleType = roleType;
@@ -17,9 +20,26 @@ public class Relation {
 	
 	public Relation ()
 	{
-		
+		objectString = "";
+		subjectString = "";
 	}
 	
+	public String getObjectString() {
+		return objectString;
+	}
+
+	public void setObjectString(String objectString) {
+		this.objectString = objectString;
+	}
+
+	public String getSubjectString() {
+		return subjectString;
+	}
+
+	public void setSubjectString(String subjectString) {
+		this.subjectString = subjectString;
+	}
+
 	public String getId() {
 		return id;
 	}

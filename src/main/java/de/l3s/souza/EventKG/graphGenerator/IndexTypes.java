@@ -29,7 +29,7 @@ public class IndexTypes {
 		BufferedReader br = new BufferedReader (frEntities);
 		
 		String lineEntities = "";
-		System.out.println("reading file...: " + fileEntities.getName());
+	//	System.out.println("reading file...: " + fileEntities.getName());
 		while ((lineEntities=br.readLine())!=null)
     	{
     		

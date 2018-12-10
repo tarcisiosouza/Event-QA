@@ -9,6 +9,7 @@ public class QueryCleaner {
 	
 	public String getCleanQuery (String query)
 	{
+		triples.clear();
 		String newQuery = "";
 		StringTokenizer token = new StringTokenizer (query,"\n");
 		
