@@ -80,7 +80,7 @@ EventKG.graphGenerator-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 java -jar EventKG.graphGenerator-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 ```
 - **Wait** until the program concludes the execution
-- **Output** is the file  "queries.json" with the queries generated
+- **Output** is the file  "queries_machine.json" with the queries generated
 
 #### Output
 
