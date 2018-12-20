@@ -21,7 +21,7 @@ A query in our dataset has the following JSON structure:
             {
                 "id": 'Unique identifier of the query in the dataset",
                 "sparql_query": "SPARQL Query",
-                "question": "The natural language representaion of the query"
+                "question": "The natural language representation of the query"
             },
             .
             .
