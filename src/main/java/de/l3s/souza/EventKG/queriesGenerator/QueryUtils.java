@@ -1,6 +1,7 @@
 package de.l3s.souza.EventKG.queriesGenerator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -25,6 +26,11 @@ public class QueryUtils {
 	private QueryBuilder queryBuilder;
 	private HashSet<String> pairRelationsRoletypeEntity;
 	
+	public QueryUtils ()
+	{
+		randomFilter = new RandomFilter ();
+	}
+	
 	public QueryUtils(RelationSnapshot relation, String eventAttributes, String obId, String subId, 
 			TimeStampUtils ts, RelationUtils relationUtils, PropertyUtils propertyUtils, 
 			 Map<String,String> events,HashSet<String> pairRelationsRoletypeEntity,String queryType,Map<String,String> typesEntities,int generated) throws IOException {
@@ -42,7 +48,7 @@ public class QueryUtils {
 
 	public QueryUtils(RelationSnapshot relation1,RelationSnapshot relation2, String eventAttributes, String objectIdr1, String objectIdr2,
 			String subjectIdr1, String subjectIdr2,
-			TimeStampUtils ts, RelationUtils relationUtils, PropertyUtils propertyUtils, Map<String,String> events, String queryType,Map<String,String> typesEntities,int generated) throws IOException {
+			TimeStampUtils ts, RelationUtils relationUtils, PropertyUtils propertyUtils, Map<String,String> events, String queryType,Map<String,String> typesEntities,int generated, Map<String,String> entitiesEvents) throws IOException {
 		
 		this.relation1 = relation1;
 		this.relation2 = relation2;
@@ -53,7 +59,7 @@ public class QueryUtils {
 		randomFilter = new RandomFilter ();
 		this.eventAttributes = eventAttributes;
 //		relationSearch = new RelationSearch ("souza_eventkg_relations_all");
-		queryBuilder = new QueryBuilder (relationUtils, relation1,relation2, propertyUtils, ts, eventAttributes,queryType,typesEntities,generated);
+		queryBuilder = new QueryBuilder (relationUtils, relation1,relation2, propertyUtils, ts, eventAttributes,queryType,typesEntities,generated, entitiesEvents);
 		
 	}
 
@@ -112,5 +118,15 @@ public class QueryUtils {
 			
 		return queryBuilder.getQueryName();
 	}
+	
+	public String generateQueryType ()
+	{
+		ArrayList<String> queryTypes = new ArrayList<String>();
+		queryTypes.add("ask");
+		queryTypes.add("select");
+		queryTypes.add("count");
+		return (randomFilter.getRandomValue(queryTypes));
+	}
+	
 
 }

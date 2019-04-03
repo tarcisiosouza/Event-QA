@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
@@ -14,16 +15,21 @@ import java.util.regex.Pattern;
 public class PropertyUtils {
 	
 	private Map<String,String> wikidataProp;
-	
+	private Map<String,String> dboOwlSameAs;
 	public PropertyUtils() {
 		
 	//	this.wikidataProp = wikidataProp;
 	}
 	
+	public void setOwlSameAsMap (Map<String,String> map)
+	{
+		dboOwlSameAs = new HashMap<String,String>();
+		dboOwlSameAs = map;
+	}
+/*	
 	public String getOwlSameAs (String id, String language) throws IOException
 	{
-		/*
-		String attrib = getAttributes (id);*/
+		
 		String owlSameAs = "";
 		try {
 		String urId = id.replaceAll("\\<", "");
@@ -53,16 +59,19 @@ public class PropertyUtils {
 		{
 			return "";
 		}
-	/*
-		owlSameAs = getValueFromDocument (attrib, "owl:sameAs", language);
-		
-		if (owlSameAs.isEmpty()) 
-		{
-			owlSameAs = getValueFromDocument (attrib, "owl:sameAs", " ");
-
-		}
-*/
+	
 		return owlSameAs;
+		
+	}
+	*/
+	
+	public String getOwlSameAs (String id, String language) throws IOException
+	{
+		
+		if (dboOwlSameAs.containsKey(id))
+			return dboOwlSameAs.get(id);
+		return "";
+		
 		
 	}
 	

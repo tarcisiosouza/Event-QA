@@ -1,154 +1,78 @@
 package de.l3s.souza.EventKG.queriesGenerator;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.StringTokenizer;
-import java.util.stream.Collectors;
+import java.util.Map.Entry;
 
 import de.l3s.souza.EventKG.graphGenerator.IndexRelations;
-import de.l3s.souza.EventKG.graphGenerator.IndexTypes;
 import de.l3s.souza.EventKG.queriesGenerator.relation.RelationSnapshot;
 import de.l3s.souza.EventKG.queriesGenerator.relation.RelationUtils;
-import de.l3s.souza.properties.PropertiesManager;
 
-public final class run {
 
-	private static HashSet<String> pairRelationsRoletypeEvent = new HashSet<String>(); 
+public class RandomWalk {
 	
-	private static BufferedWriter out_machine ;
-	private static BufferedWriter out_human ;
-
-	private static HashSet<Integer> generatedKeys = new HashSet<Integer>();
-	private static RelationUtils relationUtils;
-
-	private static String query = "";
-
-	private static int generated = 0;
-	private static Map<String,String> entitiesEvents = new HashMap<String,String>();
-	private static Map<String,String> events = new HashMap<String,String>();
-	private static Map<String,String> eventsFromRelationsOther = new HashMap<String,String>();
-	private static Map<String,String> entitiesFromRelationsEntitiesOther = new HashMap<String,String>();
+	private static int maxqueries;
+	private static int generated;
 	private static RandomFilter randomFilter;
-
-	private static ArrayList<String> relationsKeySetEntities;
-	private static Map<String,String> typesEntities = new HashMap<String,String>();
-	private static IndexRelations indexRelations;
-	private static Map<String,RelationSnapshot> RelationsIndex = new HashMap<String,RelationSnapshot>();
-	private static Map<String,RelationSnapshot> RelationsEntitiesOtherIndex = new HashMap<String,RelationSnapshot>();
-
-//	private static Map<String,Integer> RelationsEventsLinks = new HashMap<String,Integer>();
-
+	private static HashSet<Integer> generatedKeys;
 	private static TimeStampUtils timeStampUtils;
 	private static PropertyUtils propertyUtils;
+	private static RelationUtils relationUtils;
+	private static QueryUtils queryUtils;
+	private static String queryType; 
 	private static RelationSnapshot r1;
 	private static RelationSnapshot r2;
+	
+	private static IndexRelations indexes;
+	
+	private static Map<String,String> typesEntities;
 	private static String objectIdr1 = "";
 	private static String objectIdr2 = "";
 	private static String subjectId = "";
 	private static String subjectIdr1 = "";
 	private static String subjectIdr2 = "";
-	private static String queryType;
-	private static PropertiesManager pm;
-	private static ArrayList<String> queriesCreated ;
-	private static ArrayList<String> queriesCreatedHuman ;
+	
+	private static HashSet<String> pairRelationsRoletypeEvent; 
 
-	public static void main (String args[]) throws IOException, InterruptedException
-	{
-		
-		pm = new PropertiesManager ();
-		System.out.println("Reading data...");
-		IndexTypes indexTypes = new IndexTypes ();
-		typesEntities = indexTypes.getMap(pm.getDataFolder());
+	private static ArrayList<String> queriesCreatedHuman ;
+	private static ArrayList<String> queriesCreated ;
+
+	public static int getMaxqueries() {
+		return maxqueries;
+	}
+
+	public static void setMaxqueries(int maxqueries) {
+		RandomWalk.maxqueries = maxqueries;
+	}
+
+	public RandomWalk (int maxqueries, IndexRelations indexes, Map<String,String> typesEntities) {
+	
+		queryType = "";
 		queriesCreated = new ArrayList<String> ();
 		queriesCreatedHuman = new ArrayList<String> ();
-		
-		indexRelations = new IndexRelations ();
+		RandomWalk.typesEntities = typesEntities;
+		this.indexes = indexes;
+		generated = 0;
+		pairRelationsRoletypeEvent = new HashSet<String>();
+		RandomWalk.maxqueries = maxqueries;
 		randomFilter = new RandomFilter ();
-		r1 = new RelationSnapshot ();
-		r2 = new RelationSnapshot ();
-	
-		RelationsEntitiesOtherIndex = indexRelations.getNewRelationIndexEntitiesOther(pm.getDataFolder()+"relations_entities_other_dbo.nq","<entity_",pm.getMaxRelations());
-//		RelationsEntitiesOtherIndex = indexRelations.getNewRelationIndexEntitiesOther(pm.getDataFolder()+"relations_base_dbo.nq","<entity_",pm.getMaxRelations());
-		entitiesFromRelationsEntitiesOther = indexRelations.getEntities();
-		
-		RelationsIndex = indexRelations.getNewRelationIndex(pm.getDataFolder()+"relations_other_dbo.nq","",pm.getMaxRelations()*2);
-		eventsFromRelationsOther = indexRelations.getEvents();
-		
-		/*RelationsEventsLinks = indexRelations.getRelationsLinks(pm.getDataFolder()+"relations_links_events_dbo.nq");
-		RelationsEventsLinks = getSortedMap (RelationsEventsLinks);
-		*/
-		
-//		RelationsEntitiesOtherIndex = indexRelations.getNewRelationIndexEntitiesOther(pm.getDataFolder()+"relations_entities_other_dbo_filter.nq","<entity_",pm.getMaxRelations());
-		
-	
-		indexRelations.indexEntitiesEventsMap(pm.getDataFolder() + "entities_filter.nq");
-		indexRelations.indexEntitiesEventsMap(pm.getDataFolder() + "events_filter.nq");
-		entitiesEvents = indexRelations.getEntitiesEvents();
-		
-		System.out.println("Reading completed!");
-	
-		relationsKeySetEntities = new ArrayList<>(eventsFromRelationsOther.keySet());
-		
-		out_machine = new BufferedWriter
-			    (new OutputStreamWriter(new FileOutputStream("queries_machine.json"),"UTF-8"));
-		
-		out_human = new BufferedWriter
-			    (new OutputStreamWriter(new FileOutputStream("queries_human.html"),"UTF-8"));
-		
-    	propertyUtils = new PropertyUtils ();
+		generatedKeys = new HashSet<Integer>();
+		propertyUtils = new PropertyUtils ();
     	timeStampUtils = new TimeStampUtils (propertyUtils);
     	relationUtils = new RelationUtils (propertyUtils);
-    	
-    //	RandomWalk randomWalk = new RandomWalk (pm.getMaxQueries(),indexRelations,typesEntities);
-   // 	randomWalk.generateQueries();
-//    	RandomWalk (int maxqueries, IndexRelations indexes, Map<String,String> typesEntities);
-    	generateQueriesRandomWalk (pm.getMaxQueries());
-    	
-		System.out.print("keys generated! Building queries...");
-		 
-		JsonQueryManager jsonQuery = new JsonQueryManager ();
-		HumanReadableQueryManager humanReadableQuery = new HumanReadableQueryManager ();
-
-		 out_machine.write(jsonQuery.getHeadJson());
-		 out_human.write(humanReadableQuery.getHtmlHead());
-		 
-		 for (int i=0;i<queriesCreated.size();i++)
-		 {
-			 String currentQuery = queriesCreated.get(i);
-			 if (i+1==queriesCreated.size())
-			 {
-				 currentQuery = currentQuery.replaceAll("},", "}");
-				 out_machine.write(currentQuery);
-			 }
-			 else
-			 {
-				 out_machine.write(currentQuery);
-			 }
-			 out_human.write( queriesCreatedHuman.get(i)  );		 
-		 }
-		
-		 out_machine.write(jsonQuery.getEndJson());
-		 out_human.write(humanReadableQuery.getHtmlEnd());
-		 out_machine.close();
-		 out_human.close();
-		 System.out.print("Finished!");
-
-	
+    	queryUtils = new QueryUtils ();
 	}
-	
-	private static void generateQueriesRandomWalk (int maxqueries) throws IOException, InterruptedException
+
+	public void generateQueries () throws IOException, InterruptedException
 	{
 		
 		 int maxint = 0;
+		 
 		 int randomNumberGenerated = 0;
 		 ArrayList<String> nodeTypes = new ArrayList<String> ();
 		 String node;
@@ -157,14 +81,8 @@ public final class run {
 		
 		 Random random = new Random (System.currentTimeMillis());
 		 System.out.print("Generating keys...");
-/*
-		 for (Entry<String,String> entry : entitiesEvents.entrySet())
-		 {
-			 if (entry.getKey().contains("<event"))
-				 events.put(entry.getKey(), entry.getValue());
-		 }
-*/		 
-		 while (!(RelationsIndex.isEmpty()) && (!relationsKeySetEntities.isEmpty()) && generated  < maxqueries)
+ 
+		 while (!(indexes.getRelationIndex().isEmpty()) && (!indexes.getRelationsKeySetEntities().isEmpty()) && generated  < maxqueries)
 		 {
 			 String eventId = "";
 			 String relationId1="";
@@ -173,10 +91,10 @@ public final class run {
 	    	 String	roletyper2="";
 			 node = randomFilter.getRandomValue(nodeTypes);
 			
-			 if (eventsFromRelationsOther.isEmpty())
+			 if (indexes.getEvents().isEmpty())
 			 	node = "entity";
 		
-			 maxint = relationsKeySetEntities.size();
+			 maxint = indexes.getRelationsKeySetEntities().size();
 
 			 randomNumberGenerated = random.nextInt(maxint);
 			
@@ -192,11 +110,11 @@ public final class run {
 	    	{
 	    		entityFound = true;
 	    		
-	    		System.out.print("+++ event nodes left+++: " + relationsKeySetEntities.size() + "\n");
+	    		System.out.print("+++ event nodes left +++: " + indexes.getRelationsKeySetEntities().size() + "\n");
 	    		
-	    		eventId = relationsKeySetEntities.get(randomNumberGenerated);
+	    		eventId = indexes.getRelationsKeySetEntities().get(randomNumberGenerated);
 
-	    		String relations = eventsFromRelationsOther.get(eventId);
+	    		String relations = indexes.getEvents().get(eventId);
 	    		StringTokenizer tokenRelations;
 	    		if (relations!=null)
 	    		{
@@ -204,25 +122,24 @@ public final class run {
 	    			 tokenRelations = new StringTokenizer (relations);
 	    			else
 	    			{
-	    				
-					    relationsKeySetEntities.remove(randomNumberGenerated);
+	    				indexes.removeRelationKeySetEntities((randomNumberGenerated));
 	    				continue;
 	    				
 	    			}
 	    		}
 	    		else
 	    		{
-	    			
-				    relationsKeySetEntities.remove(randomNumberGenerated);
+	    			indexes.removeRelationKeySetEntities((randomNumberGenerated));
 	    			continue;
 	    		}
-	    		generateQueryType ();
+	    		
+	    		queryType = queryUtils.generateQueryType();
 	    		
 	    		try {
 	    			
 	    			relationId1 = tokenRelations.nextToken();
 	    			
-	    			r1 = RelationsIndex.get(relationId1);
+	    			r1 = indexes.getRelationIndex().get(relationId1);
 	    		
 	    			r1.setId(relationId1);
 	    			
@@ -231,7 +148,7 @@ public final class run {
 	    			
 		    		if (subjectIdr1.contains("entity"))
 		    		{
-			    		relationsEntity = entitiesFromRelationsEntitiesOther.get(subjectIdr1);
+			    		relationsEntity = indexes.getEntities().get(subjectIdr1);
 			    		
 			    		entityId = subjectIdr1;
 			    		
@@ -245,31 +162,28 @@ public final class run {
 			    			else
 
 			    			{
-			    				
-							    relationsKeySetEntities.remove(randomNumberGenerated);
+			    				indexes.removeRelationKeySetEntities(randomNumberGenerated);
 			    				continue;
 			    			}
 		    			}
 		    			else
 		    			{
-		    				
-						    relationsKeySetEntities.remove(randomNumberGenerated);
+		    				indexes.removeRelationKeySetEntities(randomNumberGenerated);
 		    				continue;
 			    		
 		    			}
-			    		r2 = RelationsEntitiesOtherIndex.get(relationId2);
+			    		r2 = indexes.getRelationsEntitiesOtherIndex().get(relationId2);
 			    	
 			    		r2.setId(relationId2);
 			    		
-			    		RelationsEntitiesOtherIndex.remove(relationId2);
+			    		indexes.removeFromEntitiesOtherIndex(relationId2);
 			    		
-			    		RelationsIndex.remove(relationId1);
-			    		relationsKeySetEntities.remove(randomNumberGenerated);
+			    		indexes.removeFromRelationIndex(relationId1);
 
 		    		}
 		    		else if (objectIdr1.contains("entity"))
 		    		{
-		    			relationsEntity = entitiesFromRelationsEntitiesOther.get(objectIdr1);
+		    			relationsEntity = indexes.getEntities().get(objectIdr1);
 		    			
 		    			entityId = objectIdr1;
 		    			
@@ -282,26 +196,23 @@ public final class run {
 			    			}
 			    			else
 			    			{
-			    				
-							    relationsKeySetEntities.remove(randomNumberGenerated);
+			    				indexes.removeRelationKeySetEntities(randomNumberGenerated);
 			    				continue;
 			    			}
 		    			}
 		    			else
 		    			{
-		    				
-						    relationsKeySetEntities.remove(randomNumberGenerated);
+		    				indexes.removeRelationKeySetEntities(randomNumberGenerated);
 		    				continue;
 		    			}
-		    			r2 = RelationsEntitiesOtherIndex.get(relationId2);
+		    			r2 = indexes.getRelationsEntitiesOtherIndex().get(relationId2);
 		    			
 		    			r2.setId(relationId2);
 		    			
-		    			RelationsIndex.remove(relationId1);
+		    			indexes.removeFromRelationIndex(relationId1);
 		    			
-		    			RelationsEntitiesOtherIndex.remove(relationId2);
+		    			indexes.removeFromEntitiesOtherIndex(relationId2);
 		    			
-		    			relationsKeySetEntities.remove(randomNumberGenerated);
 		    			
 		    		}
 		    		else
@@ -325,12 +236,8 @@ public final class run {
 		    			roletyper2 = tokenr2.nextToken();
 		    		
 		    			if (roletyper1.contentEquals(roletyper2))
-		    			{
-		    				
-						    relationsKeySetEntities.remove(randomNumberGenerated);
 		    				continue;
-		    			}
-		    			
+		    		
 		    			if (pairRelationsRoletypeEvent.contains(roletyper1 + " " + roletyper2))
 		    			{
 		    				if (relations.length() > 34)
@@ -343,11 +250,10 @@ public final class run {
 			    			else
 			    				relationsEntity = relationsEntity.replaceAll(relationId2, "");
 			    			
-		    				eventsFromRelationsOther.put(eventId, relations);
+		    				indexes.updateEvents(eventId, relations);
 		    				
-		    				entitiesFromRelationsEntitiesOther.put(entityId, relationsEntity);
+		    				indexes.updateEntitiesIndex(entityId, relationsEntity);
 		    				
-		    				relationsKeySetEntities.remove(randomNumberGenerated);
 		    				continue;
 		    			}
 		    		
@@ -363,8 +269,9 @@ public final class run {
 		    			else
 		    				relationsEntity = relationsEntity.replaceAll(relationId2, "");
 		    			
-		    			eventsFromRelationsOther.put(eventId, relations);
-		    			entitiesFromRelationsEntitiesOther.put(entityId, relationsEntity);
+		    			indexes.updateEvents(eventId, relations);
+	    				
+	    				indexes.updateEntitiesIndex(entityId, relationsEntity);
 		    			
 		    			subjectIdr1 = relationUtils.getSubObjIdFromRelation(r1, "subject");
 		    			subjectIdr2 = relationUtils.getSubObjIdFromRelation(r2, "subject");
@@ -385,21 +292,17 @@ public final class run {
 		    		
 		    			
 		    			if (relations.isEmpty())
-		    				eventsFromRelationsOther.remove(eventId);
+		    				indexes.removeEvent(eventId);
 		    			
 		    			if  (relationsEntity.isEmpty())
-		    				entitiesFromRelationsEntitiesOther.remove(entityId);
+		    				indexes.removeEntity(entityId);
 		    		
-		    			
-					    relationsKeySetEntities.remove(randomNumberGenerated);
 		    		} //end if (entityFound)
 		    		
 	    		} catch (Exception e)
     			{
-	    			eventsFromRelationsOther.remove(eventId);
-	    			
-	    			
-//				    relationsKeySetEntities.remove(randomNumberGenerated);
+	    			indexes.removeEvent(eventId);
+    				indexes.removeRelationKeySetEntities(randomNumberGenerated);
 
     				continue;
 	    			
@@ -409,11 +312,11 @@ public final class run {
 	    	if (node.contains("event"))
 	    	{
 	    		
-	    		System.out.print("+++ event nodes left+++: " + relationsKeySetEntities.size() + "\n");
+	    		System.out.print("+++ event nodes left+++: " + indexes.getRelationsKeySetEntities().size() + "\n");
 	    		
-	    		eventId = relationsKeySetEntities.get(randomNumberGenerated);
+	    		eventId = indexes.getRelationsKeySetEntities().get(randomNumberGenerated);
 	    		
-	    		String relations = eventsFromRelationsOther.get(eventId);
+	    		String relations = indexes.getEvents().get(eventId);
 	    		StringTokenizer tokenRelations;
 	    		
 	    		if (relations!=null)
@@ -422,39 +325,37 @@ public final class run {
 	    			 tokenRelations = new StringTokenizer (relations);
 	    			else
 	    			{
-	    				
-					    relationsKeySetEntities.remove(randomNumberGenerated);
+	    				indexes.removeRelationKeySetEntities(randomNumberGenerated);
 	    				continue;
 	    				
 	    			}
 	    		}
 	    		else
 	    		{
-	    			
-				    relationsKeySetEntities.remove(randomNumberGenerated);
+	    			indexes.removeRelationKeySetEntities(randomNumberGenerated);
 	    			continue;
 	    		}
 	    		
-	    		generateQueryType ();
+	    		queryType = queryUtils.generateQueryType();
 	    
 	    		try {
 	    			
 	    			 relationId1 = tokenRelations.nextToken();
 	    			 relationId2 = tokenRelations.nextToken();
 	    		
-	    			r1 = RelationsIndex.get(relationId1);
-	    			r2 = RelationsIndex.get(relationId2);
+	    			r1 = indexes.getRelationIndex().get(relationId1);
+	    			r2 = indexes.getRelationIndex().get(relationId2);
 	    			r1.setId(relationId1);
-	    			RelationsIndex.remove(relationId1);
-	    			RelationsIndex.remove(relationId2);
-
+	    			
+	    			indexes.removeFromRelationIndex(relationId1);
+	    			indexes.removeFromRelationIndex(relationId2);
+	    			
 	    			r2.setId(relationId2);
 	    		} catch (Exception e)
 	    		{
 	    			//not enough relations left to construct a query, then delete the event node
-	    			
-	    			eventsFromRelationsOther.remove(eventId);
-//	    			relationsKeySetEntities.remove(randomNumberGenerated);
+	       			indexes.removeEvent(eventId);
+		    		indexes.removeRelationKeySetEntities(randomNumberGenerated);
 	    			continue;
 	    		}
 	    	
@@ -467,10 +368,8 @@ public final class run {
 	    		roletyper2 = tokenr2.nextToken();
 	    		
 	    		if (roletyper1.contentEquals(roletyper2))
-	    		{
-	    			relationsKeySetEntities.remove(randomNumberGenerated);
 	    			continue;
-	    		}
+	    		
 	    		if (pairRelationsRoletypeEvent.contains(roletyper1 + " " + roletyper2))
 	    		{
 	    			if (relations.length() > 34)
@@ -483,9 +382,7 @@ public final class run {
 	    			else
 	    				relations = relations.replaceAll(relationId2, "");
 	    			
-	    			eventsFromRelationsOther.put(eventId, relations);
-	    			
-	    			relationsKeySetEntities.remove(randomNumberGenerated);
+	    			indexes.updateEvents(eventId, relations);
 	    			continue;
 	    		}
 	    		
@@ -501,10 +398,10 @@ public final class run {
     			else
     				relations = relations.replaceAll(relationId2, "");
     			
-	    		eventsFromRelationsOther.put(eventId, relations);
+    			indexes.updateEvents(eventId, relations);
 	    		
-	    		eventsFromRelationsOther.remove(eventId);
-	    		relationsKeySetEntities.remove(randomNumberGenerated);
+    			indexes.removeEvent(eventId);
+	    		indexes.removeRelationKeySetEntities(randomNumberGenerated);
 	    	
 	    		subjectIdr1 = relationUtils.getSubObjIdFromRelation(r1, "subject");
 	    		subjectIdr2 = relationUtils.getSubObjIdFromRelation(r2, "subject");
@@ -531,35 +428,26 @@ public final class run {
 	    	pairRelationsRoletypeEvent.remove(roletyper1 + " " + roletyper2 );
 	    	
 	    	System.out.print("+++ expansion node: " + node + "\n");
-	    	expandFromRelation (subjectId,objectId,eventAttrib,node);
+	    	//expandFromRelation (subjectId,objectId,eventAttrib,node);
 	    	
 	    	
 	    	pairRelationsRoletypeEvent.add(roletyper1 + " " + roletyper2);
-	    
+	    	
 	    	}	
 	}
-	
-	private static void generateQueryType ()
-	{
-		ArrayList<String> queryTypes = new ArrayList<String>();
-		//queryTypes.add("ask");
-		queryTypes.add("select");
-		queryTypes.add("count");
-		queryType = randomFilter.getRandomValue(queryTypes);
-	}
-	
-	private static void expandFromRelation (String subId, String obId, String eventAttrib, String node) throws IOException, InterruptedException
+
+	/*private static void expandFromRelation (String subId, String obId, String eventAttrib, String node) throws IOException, InterruptedException
 	{
 		QueryUtils queryUtils;
 		QueryCleaner cleanQuery = new QueryCleaner ();
 		HumanReadableQueryManager humanReadableQuery = new HumanReadableQueryManager ();
 		
 		queryUtils = new QueryUtils (r1,r2, eventAttrib, objectIdr1, objectIdr2,subjectIdr1, subjectIdr2, timeStampUtils, relationUtils, 
-					propertyUtils,eventsFromRelationsOther,queryType,typesEntities,generated,entitiesEvents); 
+					propertyUtils,indexes.getEvents(),queryType,typesEntities,generated); 
 	  	
-		queryType = queryUtils.getQueryType();
+		//queryType = queryUtils.getQueryType();
 		
-		query = queryUtils.getQuerySubGraph(node);
+		String query = queryUtils.getQuerySubGraph(node);
 		
 		JsonQueryManager jsonQueryManager = new JsonQueryManager ();
 		
@@ -584,30 +472,5 @@ public final class run {
 		}
 				
 	}
-	
-	private static Map<String, Integer> getSortedMap (Map<String, Integer> map)
-	{
-		Map<String, Integer> sample = new HashMap<>(map);  // push some values to map  
-		
-	/*	
-		Map<String, Integer> newMapSortedByKey = sample.entrySet().stream()
-		                    .sorted(Map.Entry.<String,Integer>comparingByKey().reversed())
-		                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-	****/	
-		
-		
-		Map<String, Integer> newMapSortedByValue = sample.entrySet().stream()
-		                        .sorted(Map.Entry.<String,Integer>comparingByValue().reversed())
-		                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1,e2) -> e1, LinkedHashMap::new));
-	/*	
-		for (Entry<String,Integer> entry : newMapSortedByValue.entrySet())
-		{
-			System.out.println(entry.getKey() +" " + entry.getValue());
-		}
-	
-		*/
-		
-		return newMapSortedByValue;
-	}
+*/
 }
-	

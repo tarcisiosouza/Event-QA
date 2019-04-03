@@ -34,7 +34,7 @@ public class EventkgClient {
 
 	public boolean hasResult(String incomingQuery) throws InterruptedException {
 
-	    ExecutorService executor = Executors.newFixedThreadPool(4);
+	    ExecutorService executor = Executors.newFixedThreadPool(1);
 
 		String query = "";
 		String prefix = "";
@@ -53,10 +53,11 @@ public class EventkgClient {
 					+ "PREFIX dcterms: <http://purl.org/dc/terms/>\n" ;
 
 			query = prefix + incomingQuery;
-			
+		//http://hadoop3.kbs.uni-hannover.de:8900/sparql?
 			final String uri = "http://eventkginterface.l3s.uni-hannover.de/sparql?default-graph-uri=&query="
 					+ URLEncoder.encode(query, "UTF-8") + "&format=json";
 
+		
 			 Future<?> future = executor.submit(new Runnable() {
 			        @Override
 			        public void run() {
@@ -72,7 +73,7 @@ public class EventkgClient {
 			    executor.shutdown();            //        <-- reject all further submissions
 
 			    try {
-			        future.get(5, TimeUnit.SECONDS);  //     <-- wait 2 seconds to finish
+			        future.get(2, TimeUnit.SECONDS);  //     <-- wait 2 seconds to finish
 			    } catch (InterruptedException e) {    //     <-- possible error cases
 			    //    System.out.println("job was interrupted");
 			    } catch (ExecutionException e) {
@@ -80,11 +81,11 @@ public class EventkgClient {
 			    } catch (TimeoutException e) {
 			        future.cancel(true);              //     <-- interrupt the job
 			        System.out.println("timeout");
-			        Thread.sleep(5000);
+			      //  Thread.sleep(3000);
 			    }
 
 			    // wait all unfinished tasks for 2 sec
-			    if(!executor.awaitTermination(5, TimeUnit.SECONDS)){
+			    if(!executor.awaitTermination(2, TimeUnit.SECONDS)){
 			        // force them to quit by interrupting
 			        executor.shutdownNow();
 			    }
@@ -160,7 +161,7 @@ public class EventkgClient {
 			} catch (IOException e) {
 			//	System.out.println("IOException in loadRelations. Repeat. URI: " + uri + ".");
 				lines = "excep";
-		        Thread.sleep(5000);
+		       // Thread.sleep(3000);
 				
 			}
 		}

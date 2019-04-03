@@ -318,10 +318,10 @@ public class HumanReadableQueryManager {
 //				System.out.println("linesFilter after: "  + linesFilter + "------");
 				
 				lineRelation1 = setDbrVariables (lineRelation1);
-				System.out.println("Line relation 1 after: " + lineRelation1);
+//				System.out.println("Line relation 1 after: " + lineRelation1);
 
 				lineRelation2 = setDbrVariables (lineRelation2);
-				System.out.println("Line relation 2 after: " + lineRelation2);
+//				System.out.println("Line relation 2 after: " + lineRelation2);
 				
 				if (clauseQuery.contains("ASK"))
 				{

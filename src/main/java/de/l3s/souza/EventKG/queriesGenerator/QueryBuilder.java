@@ -71,7 +71,6 @@ public class QueryBuilder {
 	private ArrayList<String> variables = new ArrayList<String>();
 	private ArrayList<String> candidateVariables = new ArrayList<String>();
 	private ArrayList<String> triples = new ArrayList<String>();
-	
 	public String getQueryName() {
 		return queryName;
 	}
@@ -84,6 +83,7 @@ public class QueryBuilder {
 			TimeStampUtils timestampUtils, String eventAttributes, String queryType,Map<String,String> typesEntities,int generated) {
 		
 		this.typesEntities = typesEntities;
+		
 		this.generated = generated;
 		eventVar = "?event";
 		this.eventAttributes = eventAttributes;
@@ -130,9 +130,10 @@ public class QueryBuilder {
 	}
 
 	public QueryBuilder(RelationUtils relationUtils, RelationSnapshot relation1, RelationSnapshot relation2, PropertyUtils propertyUtils, 
-			TimeStampUtils timestampUtils, String eventAttributes, String queryType,Map<String,String> typesEntities,int generated) {
+			TimeStampUtils timestampUtils, String eventAttributes, String queryType,Map<String,String> typesEntities,int generated, Map<String,String> entitiesEvents) {
 		
 		this.typesEntities = typesEntities;
+		
 		this.generated = generated;
 		eventVar = "?event";
 		this.relation1 = relation1;
@@ -166,6 +167,8 @@ public class QueryBuilder {
 		this.relationUtils = relationUtils;
 		this.queryType = queryType;
 		this.propertyUtils = propertyUtils;
+		this.propertyUtils.setOwlSameAsMap(entitiesEvents);
+		
 		this.timestampUtils = timestampUtils;
 		client = new EventkgClient ();
 		queries = new ArrayList<String>();
@@ -340,7 +343,7 @@ public class QueryBuilder {
 			id = id + ">";
 			
 			assignedVars.put(var1, " owl:sameAs " + propertyUtils.getOwlSameAs (id,"@en") + " .\n");
-			givenVars.put(var1, propertyUtils.getTextLabelFirstEnglishEntity(id));
+			givenVars.put(var1, propertyUtils.getOwlSameAs (id,"@en"));
 			
 			id = r.getSubject();
 			
@@ -350,7 +353,7 @@ public class QueryBuilder {
 			id = "<" + id;
 			id = id + ">";
 			assignedVars.put(var2, " owl:sameAs " + propertyUtils.getOwlSameAs (id,"@en") + " .\n");
-			givenVars.put(var2, propertyUtils.getTextLabelFirstEnglishEntity(id));
+			givenVars.put(var2, propertyUtils.getOwlSameAs (id,"@en"));
 		
 		}
 		else
@@ -378,7 +381,7 @@ public class QueryBuilder {
 				id = m.group(1);
 				id = "<" + id;
 				id = id + ">";
-				givenVars.put(var1, propertyUtils.getTextLabelFirstEnglishEntity(id));
+				givenVars.put(var1, propertyUtils.getOwlSameAs (id,"@en"));
 				updatedRelation = relationUtils.addNodeRelation(var1,updatedRelation,id, "object");
 				id = r.getSubject();
 				
@@ -387,7 +390,7 @@ public class QueryBuilder {
 				id = mSub.group(1);
 				id = "<" + id;
 				id = id + ">";
-				givenVars.put(var2, propertyUtils.getTextLabelFirstEnglishEntity(id));
+				givenVars.put(var2,propertyUtils.getOwlSameAs (id,"@en"));
 				relationUtils.addNodeRelation(var1,r,id, "subject");
 				updatedRelation = relationUtils.addNodeRelation(var2,updatedRelation, id,"subject");
 
@@ -417,7 +420,7 @@ public class QueryBuilder {
 						id = id + ">";
 				
 						assignedVars.put(var1, " owl:sameAs " + propertyUtils.getOwlSameAs (id,"@en") + " .\n");
-						givenVars.put(var1, propertyUtils.getTextLabelFirstEnglishEntity(id));
+						givenVars.put(var1, propertyUtils.getOwlSameAs (id,"@en"));
 						setTripleEventAttributes (var1,id,r);
 
 						relationUtils.addNodeRelation(var1,r,id, "object");
@@ -437,7 +440,7 @@ public class QueryBuilder {
 					id = "<" + id;
 					id = id + ">";
 					assignedVars.put(eventVar, " owl:sameAs " + propertyUtils.getOwlSameAs (id,"@en") + " .\n");
-					givenVars.put(eventVar, propertyUtils.getTextLabelFirstEnglishEntity(id));
+					givenVars.put(eventVar, propertyUtils.getOwlSameAs (id,"@en"));
 					setTripleEventAttributes (eventVar,id,r);
 
 					query = query + eventVar + " rdf:type sem:Event .\n";
@@ -461,7 +464,7 @@ public class QueryBuilder {
 				id = "<" + id;
 				id = id + ">";
 				assignedVars.put(var1, " owl:sameAs " + propertyUtils.getOwlSameAs (id,"@en") + " .\n");
-				givenVars.put(var1, propertyUtils.getTextLabelFirstEnglishEntity(id));
+				givenVars.put(var1, propertyUtils.getOwlSameAs (id,"@en"));
 				
 
 			}
@@ -486,7 +489,7 @@ public class QueryBuilder {
 				id = "<" + id;
 				id = id + ">";
 				assignedVars.put(var1, " owl:sameAs " + propertyUtils.getOwlSameAs (id,"@en") + " .\n");
-				givenVars.put(var1, propertyUtils.getTextLabelFirstEnglishEntity(id));
+				givenVars.put(var1, propertyUtils.getOwlSameAs (id,"@en"));
 				setTripleEventAttributes (var1,id,r);
 
 				}
@@ -506,7 +509,7 @@ public class QueryBuilder {
 					//nlp.setEntityNaturalLanguage(eventVar,r,"subject");
 					setTripleEventAttributes (eventVar,id,r);
 
-					givenVars.put(eventVar, propertyUtils.getTextLabelFirstEnglishEntity(id));
+					givenVars.put(eventVar, propertyUtils.getOwlSameAs (id,"@en"));
 				}
 			}
 			if (r.getSubject().contains("<entity"))
@@ -525,7 +528,7 @@ public class QueryBuilder {
 				id = "<" + id;
 				id = id + ">";
 				assignedVars.put(var1, " owl:sameAs " + propertyUtils.getOwlSameAs (id,"@en") + " .\n");
-				givenVars.put(var1, propertyUtils.getTextLabelFirstEnglishEntity(id));
+				givenVars.put(var1, propertyUtils.getOwlSameAs (id,"@en"));
 				updatedRelation = relationUtils.addNodeRelation(var1,updatedRelation,id, "subject");
 			}
 		  
@@ -1029,9 +1032,9 @@ public class QueryBuilder {
 			
 			for (Entry<String,String> entry : assignedVars.entrySet())
 			{
-				if (entry.getValue().contains("wikidata"))
+				/*if (entry.getValue().contains("wikidata"))
 					return "";
-				
+				*/
 				String currentKey = entry.getKey();
 			
 				if (currentKey.contains("relation"))
