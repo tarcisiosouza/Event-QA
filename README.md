@@ -23,13 +23,16 @@ Query instance example extracted from Event-QA:
 		"knowledgegraph": "eventkg",
 		"hybrid": "false",
 		"question": [{
-			"string": "What was Hans Mortier's federation which promoted Extreme Rules in 2010?",
+			"string": "What was Hans Mortier's federation which promoted Extreme Rules 
+			in 2010?",
 			"language": "en"
 		}, {
-			"string": "Qual era a federaÃ§Ã£o de Hans Mortier, que foi a mesma que promoveu o Extreme Rules em 2010?",
+			"string": "Qual era a federação de Hans Mortier, que foi a mesma que 
+			promoveu o Extreme Rules em 2010?",
 			"language": "pt"
 		}, {
-			"string": "Welchem Verband, der auch das Extreme-Rules-Event promotet hat, gehÃ¶rt Hans Mortier an?",
+			"string": "Welchem Verband, der auch das Extreme-Rules-Event promotet hat, 
+			gehört Hans Mortier an?",
 			"language": "de"
 		}],
 		"query": {
@@ -67,7 +70,7 @@ The configuration file (/src/main/resources/config.properties) points to the inp
 
 
 ```
-input_data /home/.../data/
+data_folder=/home/.../data/
 max_queries=100
 max_relations=200000 
 format=json
