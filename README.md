@@ -8,25 +8,56 @@ random-walk sub-graph traversal.
 
 ## Benchmark queries ##
 
-A query in our dataset has the following JSON structure:
+Our dataset follows the [QALD](http://2018.nliwod.org/challenge) Challenge JSON structure.
+
+Query instance example extracted from Event-QA:
 
 ```
 {
-    "dataset": 
-    {
-  
-        "prefix": "The prefix used by the queries",
-        "queries": 
-        [
-            {
-                "id": 'Unique identifier of the query in the dataset",
-                "sparql_query": "SPARQL Query",
-                "question": "The natural language representation of the query"
-            },
-            .
-            .
-        ]
-    }
+	"dataset": {
+
+		"prefix": "prefix used by EventKG",
+		"id": "event-qa-train-english-eventkg"
+	},
+	"questions": [{
+		"knowledgegraph": "eventkg",
+		"hybrid": "false",
+		"question": [{
+			"string": "What was Hans Mortier's federation which promoted Extreme Rules in 2010?",
+			"language": "en"
+		}, {
+			"string": "Qual era a federaÃ§Ã£o de Hans Mortier, que foi a mesma que promoveu o Extreme Rules em 2010?",
+			"language": "pt"
+		}, {
+			"string": "Welchem Verband, der auch das Extreme-Rules-Event promotet hat, gehÃ¶rt Hans Mortier an?",
+			"language": "de"
+		}],
+		"query": {
+			"sparql": "SELECT DISTINCT ?entity1 WHERE { ?relation1 rdf:object ?entity1 . 
+			?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:promotion . 
+			?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?entity2 . 
+			?relation2 sem:roleType dbo:federation . 
+			?event1 owl:sameAs <http://dbpedia.org/resource/Extreme_Rules_(2010)> . 
+			?entity2 owl:sameAs <http://dbpedia.org/resource/Hans_Mortier> . } "
+		},
+		"onlyDbo": "true",
+		"answerType": "resource",
+		"aggregation": "false",
+		"id": 1,
+		"answers": [{
+			"head": {
+				"vars": ["entity1"]
+			},
+			"results": {
+				"bindings": [{
+					"entity1": {
+						"type": "uri",
+						"value": "http://eventKG.l3s.uni-hannover.de/resource/entity_1717117"
+					}
+				}]
+			}
+		}]
+	}]
 }
 ```
 
@@ -44,19 +75,20 @@ format=json
 ```
 
 #### Input data 
-The input data files are compressed in one file [input.zip](input.zip). Extract them to your home folder and
+The input data files are compressed in one file [input.zip](http://eventcqa.l3s.uni-hannover.de/input.zip). Extract them to your home folder and
 specify the path in the config.properties file. The files are composed of DBpedia predicates and relations, where:
-
 
 Name | Description
 :-----|:-------------
 **relations_entities_other_dbo.nq** | list of relations with entities
 **relations_other_dbo.nq** | list of relations with events and entities
 **types_dbpedia.nq** | list of dbpedia properties
+**entities_filter.nq** | list of entities ids with values
+**events_filter.nq** | list of events ids with values
 
-In the config file, the "max_queries" parameter, which is the maximum number of queries to be obtained. 
+In the config file, the "max_queries" parameter is the maximum number of queries to be obtained. 
 The parameter "max_relations" is the maximum number of relations from the graph to be used. 
-These relations are starting points, from where the algorithm begins to traverse the sub-graphs and generated the queries. 
+These relations are starting points, from where the algorithm begins to traverse the sub-graphs and generates the queries. 
 The parameter "format" is the output format of the queries. 
 
 #### Generate queries
