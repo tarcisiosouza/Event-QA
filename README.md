@@ -75,7 +75,7 @@ format=json
 ```
 
 #### Input data 
-The input data files are compressed in one file [input.zip](http://eventcqa.l3s.uni-hannover.de/input.zip). Extract them to your home folder and
+The input data files are compressed in one file [input.zip](http://eventcqa.l3s.uni-hannover.de/dataset/input.zip). Extract them to your home folder and
 specify the path in the config.properties file. The files are composed of DBpedia predicates and relations, where:
 
 Name | Description
