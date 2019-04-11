@@ -542,7 +542,7 @@ public final class run {
 	private static void generateQueryType ()
 	{
 		ArrayList<String> queryTypes = new ArrayList<String>();
-		//queryTypes.add("ask");
+		queryTypes.add("ask");
 		queryTypes.add("select");
 		queryTypes.add("count");
 		queryType = randomFilter.getRandomValue(queryTypes);
@@ -558,9 +558,8 @@ public final class run {
 					propertyUtils,eventsFromRelationsOther,queryType,typesEntities,generated,entitiesEvents); 
 	  	
 		queryType = queryUtils.getQueryType();
-		
 		query = queryUtils.getQuerySubGraph(node);
-		
+
 		JsonQueryManager jsonQueryManager = new JsonQueryManager ();
 		
 		if (!query.isEmpty() && query.length()>400)

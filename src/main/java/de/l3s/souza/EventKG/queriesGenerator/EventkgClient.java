@@ -73,19 +73,19 @@ public class EventkgClient {
 			    executor.shutdown();            //        <-- reject all further submissions
 
 			    try {
-			        future.get(2, TimeUnit.SECONDS);  //     <-- wait 2 seconds to finish
+			        future.get(6, TimeUnit.SECONDS);  //     <-- wait 6 seconds to finish
 			    } catch (InterruptedException e) {    //     <-- possible error cases
 			    //    System.out.println("job was interrupted");
 			    } catch (ExecutionException e) {
 			  //      System.out.println("caught exception: " + e.getCause());
 			    } catch (TimeoutException e) {
 			        future.cancel(true);              //     <-- interrupt the job
-			        System.out.println("timeout");
-			      //  Thread.sleep(3000);
+			   //     System.out.println("timeout");
+			       // Thread.sleep(3000);
 			    }
 
-			    // wait all unfinished tasks for 2 sec
-			    if(!executor.awaitTermination(2, TimeUnit.SECONDS)){
+			    // wait all unfinished tasks for 6 sec
+			    if(!executor.awaitTermination(6, TimeUnit.SECONDS)){
 			        // force them to quit by interrupting
 			        executor.shutdownNow();
 			    }
@@ -161,8 +161,7 @@ public class EventkgClient {
 			} catch (IOException e) {
 			//	System.out.println("IOException in loadRelations. Repeat. URI: " + uri + ".");
 				lines = "excep";
-		       // Thread.sleep(3000);
-				
+		     //   Thread.sleep(3000);
 			}
 		}
 

@@ -318,12 +318,11 @@ public class QueryBuilder {
 		rVar = generateVariable (rVar,r,"relation");
 		
 		query = query + rVar + " rdf:type eventKG-s:Relation .\n";
-	
+
 		if (r.getObject().contains("<event") && r.getSubject().contains("<event"))
 		{
 			var1 = "?event1";
 			var2 = "?event2";
-			
 			var1 = generateVariable (var1,r,"object");
 			var2 = generateVariable (var2,r,"subject");
 			object = var1;
@@ -360,6 +359,7 @@ public class QueryBuilder {
 		{
 			if (r.getObject().contains("<entity") && r.getSubject().contains("<entity"))
 			{
+				
 				var1 = "?entity1";
 				var2 = "?entity2";
 				var1 = generateVariable (var1,r,"object");
@@ -982,7 +982,7 @@ public class QueryBuilder {
 		startEndDecision.add("StartTime");
 		startEndDecision.add("EndTime");
 		String timDecision = randomFilter.getRandomValue(startEndDecision);
-		
+	
 		rel1 = setObjectSubjectRelation (r1);
 		rel2 = setObjectSubjectRelation (r2);
 
@@ -1142,33 +1142,6 @@ public class QueryBuilder {
 					}
 				}
 			}
-				/*if (variables.get(0).contains("?event") && !(queryType.contains("count")))
-				{
-					if (!triples.isEmpty())
-					{
-						String triple = randomFilter.getRandomValue(triples);
-						StringTokenizer tokentriple = new StringTokenizer (triple);
-						String pred = tokentriple.nextToken();
-						pred = tokentriple.nextToken();
-						if (!query.contains(pred))
-						{
-							if (pred.contains("hasPlace") && !(query.contains("dbo:city") || query.contains("dbo:country")))
-							{
-								query = query.replaceAll("\n} LIMIT 1", "");
-								query = query + triple + "\n";
-								query = query + "\n} LIMIT 1\n";
-							}
-							else if (!pred.contains("hasPlace"))
-							{
-								query = query.replaceAll("\n} LIMIT 1", "");
-								query = query + triple + "\n";
-								query = query + "\n} LIMIT 1\n";
-							}
-							
-						}
-					}
-				}
-				*/
 		}
 		 else
 		 {
@@ -1382,9 +1355,10 @@ public class QueryBuilder {
 		ArrayList<String> queryTypes = new ArrayList<String>();
 		queryTypes.add("ask");
 		queryTypes.add("select");
+		queryTypes.add("count");
+
 		queryType = randomFilter.getRandomValue(queryTypes);
 		
-		queryType = "count";
 		ArrayList<String> variables = new ArrayList<String>();
 		
 		if (queryType.contains("ask"))

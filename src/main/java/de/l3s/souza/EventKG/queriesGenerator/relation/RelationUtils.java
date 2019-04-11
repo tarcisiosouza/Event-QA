@@ -232,8 +232,9 @@ public class RelationUtils {
 	{
 		RelationSnapshot r = relation;
 		
-		String nodeLabel = propertyUtils.getLabelFirstEnglishEntity(nodeId);
-		String attributes = propertyUtils.getAttributes(nodeId);
+		String nodeLabel = propertyUtils.getOwlSameAs (nodeId,"@en");
+		
+		String attributes = "";
 		Node node = new Node (nodeType,nodeLabel,varName);
 		node.setAttributes(attributes);
 	/*	

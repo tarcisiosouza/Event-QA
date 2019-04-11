@@ -6,203 +6,203 @@
 		[
 			{
 				"id":1,
-				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:country . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:poleDriver . ?entity1 owl:sameAs <http://dbpedia.org/resource/New_Zealand> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Mitch_Evans> . } "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:commander . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:battle . ?event1 owl:sameAs <http://dbpedia.org/resource/Operation_Moshtarak> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Stanley_A._McChrystal> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Marine_Aircraft_Group_40> . } "
 			},
 			{
 				"id":2,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:battle . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:commander . ?entity1 owl:sameAs <http://dbpedia.org/resource/Robert_Moncel> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Alfred_Schlemm> . }  "
+				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:chairman . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:homeStadium . ?entity1 owl:sameAs <http://dbpedia.org/resource/Peter_Hill-Wood> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Arsenal_Stadium> . } "
 			},
 			{
 				"id":3,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:ground . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:chairman . ?entity1 owl:sameAs <http://dbpedia.org/resource/Selman_Stërmasi_Stadium> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Refik_Halili> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:conflict . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:battle . ?entity1 owl:sameAs <http://dbpedia.org/resource/John_III_of_Glymes> . ?entity2 owl:sameAs <http://fr.dbpedia.org/resource/René_de_Montjean> . }  "
 			},
 			{
 				"id":4,
-				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:ground . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:league . ?entity1 owl:sameAs <http://dbpedia.org/resource/Bologhine> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Algerian_Ligue_Professionnelle_1> . } "
+				"sparql_query": "SELECT count ( DISTINCT ?entity1 ) as ?count WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:battle . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:commander . ?event1 owl:sameAs <http://dbpedia.org/resource/Dodecanese_campaign> . } "
 			},
 			{
 				"id":5,
-				"sparql_query": "SELECT DISTINCT ?event2 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:nextEvent . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:goldMedalist . ?event1 owl:sameAs <http://dbpedia.org/resource/Synchronized_swimming_at_the_2008_Summer_Olympics_–_Women's_duet> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Anastasia_Davydova> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:country . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:similar . ?event1 owl:sameAs <http://dbpedia.org/resource/Rosalia_(festival)> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Roman_Empire> . ?event2 owl:sameAs <http://dbpedia.org/resource/Adonia> . } "
 			},
 			{
 				"id":6,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:successor . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:team . ?event2 owl:sameAs <http://dbpedia.org/resource/2015_FC_Istiklol_season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/FC_Istiklol> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:sport . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:organisation . ?event1 owl:sameAs <http://dbpedia.org/resource/Boxing_at_the_2012_Summer_Olympics_–_Men's_middleweight> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Boxing> . ?entity2 owl:sameAs <http://dbpedia.org/resource/International_Olympic_Committee> . } "
 			},
 			{
 				"id":7,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:ideology . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:party . ?entity1 owl:sameAs <http://dbpedia.org/resource/Historical_Right> . ?entity2 owl:sameAs <http://fr.dbpedia.org/resource/Bernard_Journu-Auber> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:poleDriver . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:secondDriver . ?event1 owl:sameAs <http://dbpedia.org/resource/2005_Spanish_Grand_Prix> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Kimi_Räikkönen> . ?event2 owl:sameAs <http://dbpedia.org/resource/2013_Hungarian_Grand_Prix> . } "
 			},
 			{
 				"id":8,
-				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:soccerLeagueWinner . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:affiliation . ?entity1 owl:sameAs <http://dbpedia.org/resource/Rangers_F.C.> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Celtic_F.C.> . } "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:battle . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:militaryUnit . ?event1 owl:sameAs <http://dbpedia.org/resource/Belgorod-Kharkov_Offensive_Operation> . ?entity1 owl:sameAs <http://dbpedia.org/resource/5th_SS_Panzer_Division_Wiking> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Felix_Steiner> . } "
 			},
 			{
 				"id":9,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:organisation . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:goldMedalist . ?entity1 owl:sameAs <http://dbpedia.org/resource/International_Olympic_Committee> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Lucie_Décosse> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:soccerTournamentLastChampion . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?event2 . ?relation2 sem:roleType dbo:league . ?event1 owl:sameAs <http://dbpedia.org/resource/1947–48_Serie_A> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Torino_F.C.> . ?event2 owl:sameAs <http://it.dbpedia.org/resource/Football_Club_Internazionale_1947-1948> . } "
 			},
 			{
 				"id":10,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:firstDriver . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:secondDriver . ?entity1 owl:sameAs <http://dbpedia.org/resource/Mario_Domínguez> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Patrick_Carpentier> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:organisation . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:city . ?entity1 owl:sameAs <http://dbpedia.org/resource/International_University_Sports_Federation> . ?entity2 owl:sameAs <http://dbpedia.org/resource/China> . }  "
 			},
 			{
 				"id":11,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:championInDoubleMale . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:category . ?entity1 owl:sameAs <http://dbpedia.org/resource/Onny_Parun> . ?event2 owl:sameAs <http://dbpedia.org/resource/Grand_Slam_(tennis)> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:predecessor . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:successor . ?event1 owl:sameAs <http://dbpedia.org/resource/1873–74_Dumbarton_F.C._season> . ?event2 owl:sameAs <http://dbpedia.org/resource/1874–75_Dumbarton_F.C._season> . } "
 			},
 			{
 				"id":12,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:coach . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:league . ?entity1 owl:sameAs <http://dbpedia.org/resource/Ugo_Tomeazzi> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Lega_Pro_Seconda_Divisione> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:goldMedalist . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:nextEvent . ?event1 owl:sameAs <http://dbpedia.org/resource/Weightlifting_at_the_2012_Summer_Olympics_–_Women's_58_kg> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Li_Xueying> . ?event2 owl:sameAs <http://dbpedia.org/resource/Weightlifting_at_the_2016_Summer_Olympics_–_Women's_58_kg> . } "
 			},
 			{
 				"id":13,
-				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:thirdTeam . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:country . ?entity1 owl:sameAs <http://dbpedia.org/resource/Team_Lotus> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Mexico> . } "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:position . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:city . ?event1 owl:sameAs <http://dbpedia.org/resource/2012–13_Premier_League> . ?event2 owl:sameAs <http://dbpedia.org/resource/2012–13_Arsenal_F.C._season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Wales> . } "
 			},
 			{
 				"id":14,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:silverMedalist . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:sportSpecialty . ?entity1 owl:sameAs <http://dbpedia.org/resource/Alex_Baumann_(bobsledder)> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Alexey_Voyevoda> . }  "
+				"sparql_query": "SELECT DISTINCT ?entity1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:country . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:city . ?event1 owl:sameAs <http://dbpedia.org/resource/Tour_of_the_Battenkill> . }  "
 			},
 			{
 				"id":15,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:manager . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:league . ?entity1 owl:sameAs <http://dbpedia.org/resource/Stefano_Pioli> . ?event2 owl:sameAs <http://dbpedia.org/resource/2012–13_Serie_A> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:thirdDriver . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:lastWin . ?entity1 owl:sameAs <http://dbpedia.org/resource/Jean_Alesi> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Damon_Hill> . }  "
 			},
 			{
 				"id":16,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:league . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:ground . ?entity1 owl:sameAs <http://dbpedia.org/resource/Serie_A> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Stadio_Renato_Dall'Ara> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:raceTrack . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:secondDriver . ?entity1 owl:sameAs <http://dbpedia.org/resource/Melbourne_Grand_Prix_Circuit> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Kimi_Räikkönen> . }  "
 			},
 			{
 				"id":17,
-				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:silverMedalist . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:goldMedalist . ?entity1 owl:sameAs <http://dbpedia.org/resource/Pierluigi_Chicca> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Umyar_Mavlikhanov> . } "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:author . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:commander . ?event1 owl:sameAs <http://dbpedia.org/resource/The_History_of_The_Lord_of_the_Rings> . ?entity1 owl:sameAs <http://dbpedia.org/resource/J._R._R._Tolkien> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Sauron> . } "
 			},
 			{
 				"id":18,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:predecessor . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:chairman . ?event2 owl:sameAs <http://dbpedia.org/resource/2000–01_Everton_F.C._season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Philip_Carter> . }  "
+				"sparql_query": "SELECT DISTINCT ?entity1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:team . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:trainerClub . ?event1 owl:sameAs <http://dbpedia.org/resource/2010–11_Club_Nacional_de_Football_season> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Alfio_Basile> . }  "
 			},
 			{
 				"id":19,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:city . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:championInSingleMale . ?entity1 owl:sameAs <http://dbpedia.org/resource/Zürich> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Steffi_Graf> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:poleDriver . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:thirdTeam . ?entity1 owl:sameAs <http://dbpedia.org/resource/Gerry_Ashmore> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Cooper_Car_Company> . }  "
 			},
 			{
 				"id":20,
-				"sparql_query": "SELECT DISTINCT ?entity1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:poleDriver . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:firstDriver . ?event1 owl:sameAs <http://dbpedia.org/resource/1987_French_Grand_Prix> . ?event2 owl:sameAs <http://dbpedia.org/resource/1994_Australian_Grand_Prix> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:nextEvent . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:silverMedalist . ?event1 owl:sameAs <http://dbpedia.org/resource/Diving_at_the_1924_Summer_Olympics_–_Women's_3_metre_springboard> . ?event2 owl:sameAs <http://dbpedia.org/resource/Diving_at_the_1920_Summer_Olympics_–_Women's_3_metre_springboard> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Aileen_Riggin> . } "
 			},
 			{
 				"id":21,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:operatingSystem . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:computingPlatform . ?entity1 owl:sameAs <http://dbpedia.org/resource/Mac_OS_X_Tiger> . ?entity2 owl:sameAs <http://dbpedia.org/resource/SPARC> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:championInDoubleMale . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:category . ?entity1 owl:sameAs <http://dbpedia.org/resource/Cara_Black> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Women's_Tennis_Association> . }  "
 			},
 			{
 				"id":22,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:chairman . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:ground . ?entity1 owl:sameAs <http://dbpedia.org/resource/Ralf_Rangnick> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Leipzig> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:organisation . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:soccerTournamentTopScorer . ?event1 owl:sameAs <http://dbpedia.org/resource/2013_Campeonato_Brasileiro_Série_A> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Brazilian_Football_Confederation> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Éderson_Alves_Ribeiro_Silva> . } "
 			},
 			{
 				"id":23,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:battle . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:conflict . ?entity1 owl:sameAs <http://dbpedia.org/resource/Adrian_Carton_de_Wiart> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Edward_Rydz-Śmigły> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:soccerLeagueRelegated . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:affiliation . ?event1 owl:sameAs <http://dbpedia.org/resource/2014_Campeonato_Acriano> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Andirá_Esporte_Clube> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Atlético_Acreano> . } "
 			},
 			{
 				"id":24,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:award . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:predecessor . ?entity1 owl:sameAs <http://dbpedia.org/resource/Mouchette> . ?event2 owl:sameAs <http://dbpedia.org/resource/31st_Venice_International_Film_Festival> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:successor . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:manager . ?event2 owl:sameAs <http://dbpedia.org/resource/2007–08_Newcastle_United_F.C._season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Alan_Shearer> . }  "
 			},
 			{
 				"id":25,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:soccerTournamentLastChampion . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?event2 . ?relation2 sem:roleType dbo:league . ?entity1 owl:sameAs <http://dbpedia.org/resource/Pakhtakor_Tashkent_FK> . ?event2 owl:sameAs <http://dbpedia.org/resource/2013_FC_Bunyodkor_season> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:secondLeader . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:foundationPlace . ?event1 owl:sameAs <http://dbpedia.org/resource/1997_United_Kingdom_general_election> . ?entity1 owl:sameAs <http://dbpedia.org/resource/John_Major> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Politics_in_Luton> . } "
 			},
 			{
 				"id":26,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:poleDriverTeam . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:firstDriver . ?entity1 owl:sameAs <http://dbpedia.org/resource/Team_Lotus> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Jim_Clark> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:territory . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:commander . ?event1 owl:sameAs <http://dbpedia.org/resource/Genoese_occupation_of_Rhodes> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Rhodes> . ?entity2 owl:sameAs <http://dbpedia.org/resource/John_Kantakouzenos_(pinkernes)> . } "
 			},
 			{
 				"id":27,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:championInSingleMale . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:championInDoubleMale . ?entity1 owl:sameAs <http://dbpedia.org/resource/Kim_Clijsters> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Virginia_Ruano_Pascual> . }  "
+				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:homeStadium . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:ground . ?entity1 owl:sameAs <http://dbpedia.org/resource/Portland,_Oregon> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Providence_Park> . } "
 			},
 			{
 				"id":28,
-				"sparql_query": "SELECT DISTINCT ?event2 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:predecessor . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:ground . ?event1 owl:sameAs <http://dbpedia.org/resource/2002–03_Heart_of_Midlothian_F.C._season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Tynecastle_Park> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:populationPlace . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:stateOfOrigin . ?entity1 owl:sameAs <http://dbpedia.org/resource/Visayans> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Bernard_Bonnin> . }  "
 			},
 			{
 				"id":29,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:field . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:movement . ?entity1 owl:sameAs <http://dbpedia.org/resource/Patrick_Moya> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Valerie_Hegarty> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:battle . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:territory . ?event1 owl:sameAs <http://dbpedia.org/resource/First_Schleswig_War> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Royal_Danish_Navy> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Schleswig-Holstein> . } "
 			},
 			{
 				"id":30,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:nextEvent . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:conflict . ?entity1 owl:sameAs <http://dbpedia.org/resource/Treaty_of_Teschen> . ?entity2 owl:sameAs <http://fr.dbpedia.org/resource/Friedrich_August_Albrecht_von_Tschirschky> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:season . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:soccerTournamentTopScorer . ?entity1 owl:sameAs <http://dbpedia.org/resource/Petrolina_Social_Futebol_Clube> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Marcos_Assis_de_Santana> . }  "
 			},
 			{
 				"id":31,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:silverMedalist . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?event2 . ?relation2 sem:roleType dbo:nextEvent . ?entity1 owl:sameAs <http://dbpedia.org/resource/Attila_Petschauer> . ?event2 owl:sameAs <http://dbpedia.org/resource/Fencing_at_the_1924_Summer_Olympics_–_Men's_sabre> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:predecessor . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:chairman . ?event1 owl:sameAs <http://dbpedia.org/resource/1999–2000_Everton_F.C._season> . ?event2 owl:sameAs <http://dbpedia.org/resource/2000–01_Everton_F.C._season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Philip_Carter> . } "
 			},
 			{
 				"id":32,
-				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:secondTeam . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:fastestDriver . ?entity1 owl:sameAs <http://dbpedia.org/resource/McLaren> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Frank_Matich> . } "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:championInSingleMale . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:championInDoubleFemale . ?event1 owl:sameAs <http://dbpedia.org/resource/1913_U.S._National_Championships_(tennis)> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Maurice_McLoughlin> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Mary_Browne> . } "
 			},
 			{
 				"id":33,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:soccerLeaguePromoted . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:soccerTournamentLastChampion . ?entity1 owl:sameAs <http://dbpedia.org/resource/Olympique_Alès> . ?entity2 owl:sameAs <http://dbpedia.org/resource/AS_Saint-Étienne> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:sport . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:soccerLeaguePromoted . ?event1 owl:sameAs <http://dbpedia.org/resource/1973–74_Bundesliga> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Association_football> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Rot-Weiss_Essen> . } "
 			},
 			{
 				"id":34,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:bronzeMedalist . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:silverMedalist . ?entity1 owl:sameAs <http://dbpedia.org/resource/Josef_Wilhelm> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Joseph_Huber_(gymnast)> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:champion . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:sport . ?event1 owl:sameAs <http://dbpedia.org/resource/1993–94_Azadegan_League> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Saipa_F.C.> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Association_football> . } "
 			},
 			{
 				"id":35,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:usedInWar . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:commander . ?entity1 owl:sameAs <http://dbpedia.org/resource/Schwarzlose_machine_gun> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Dimitrios_Gounaris> . }  "
+				"sparql_query": "SELECT DISTINCT ?entity1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:city . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:country . ?event1 owl:sameAs <http://dbpedia.org/resource/1998_FIFA_World_Cup> . ?entity2 owl:sameAs <http://fr.dbpedia.org/resource/Église_Notre-Dame-de-l'Assomption_de_Bareilles> . }  "
 			},
 			{
 				"id":36,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:soccerLeaguePromoted . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:sport . ?entity1 owl:sameAs <http://dbpedia.org/resource/Bolton_Wanderers_F.C.> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Association_football> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:ground . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:predecessor . ?event1 owl:sameAs <http://dbpedia.org/resource/2015–16_Maccabi_Haifa_F.C._season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Sammy_Ofer_Stadium> . ?event2 owl:sameAs <http://dbpedia.org/resource/2014–15_Maccabi_Haifa_F.C._season> . } "
 			},
 			{
 				"id":37,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:organisation . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:champion . ?entity1 owl:sameAs <http://dbpedia.org/resource/Gabonese_Football_Federation> . ?entity2 owl:sameAs <http://dbpedia.org/resource/AS_Sogara> . }  "
+				"sparql_query": "SELECT DISTINCT ?event2 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:successor . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:ground . ?event1 owl:sameAs <http://dbpedia.org/resource/2010–11_FK_Baku_season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Tofiq_Bahramov_Republican_Stadium> . }  "
 			},
 			{
 				"id":38,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:predecessor . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:successor . ?event2 owl:sameAs <http://dbpedia.org/resource/2011_Richmond_Kickers_season> . }  "
+				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:nextEvent . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:battle . ?entity1 owl:sameAs <http://dbpedia.org/resource/Treaty_of_Aix-la-Chapelle_(1748)> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Walloon_Guards> . } "
 			},
 			{
 				"id":39,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:champion . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:city . ?entity1 owl:sameAs <http://dbpedia.org/resource/Olympique_Lyonnais_Féminin> . ?entity2 owl:sameAs <http://dbpedia.org/resource/France> . }  "
+				"sparql_query": "SELECT count ( DISTINCT ?event1 ) as ?count WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:championInSingleFemale . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:championInDoubleFemale . ?entity1 owl:sameAs <http://dbpedia.org/resource/Serena_Williams> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Cara_Black> . } "
 			},
 			{
 				"id":40,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:poleDriver . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:fastestDriverTeam . ?entity1 owl:sameAs <http://dbpedia.org/resource/Jim_Clark> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Team_Lotus> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:raceTrack . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:lastRace . ?entity1 owl:sameAs <http://dbpedia.org/resource/Autódromo_Juan_y_Oscar_Gálvez> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Cesare_Perdisa> . }  "
 			},
 			{
 				"id":41,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:championInSingleMale . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:championInDoubleFemale . ?entity1 owl:sameAs <http://dbpedia.org/resource/Maurice_McLoughlin> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Mary_Browne> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:nextEvent . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:commander . ?event1 owl:sameAs <http://dbpedia.org/resource/First_Indochina_War> . ?event2 owl:sameAs <http://dbpedia.org/resource/War_in_Vietnam_(1945–46)> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Võ_Nguyên_Giáp> . } "
 			},
 			{
 				"id":42,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:team . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:manager . ?entity1 owl:sameAs <http://dbpedia.org/resource/Club_Nacional_de_Football> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Juan_Ramón_Carrasco> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:manager . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:successor . ?entity1 owl:sameAs <http://dbpedia.org/resource/Steve_Evans_(footballer,_born_1962)> . ?event2 owl:sameAs <http://dbpedia.org/resource/2011–12_Crawley_Town_F.C._season> . }  "
 			},
 			{
 				"id":43,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:battle . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:namedAfter . ?entity1 owl:sameAs <http://dbpedia.org/resource/Hippolyte_Piré> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Russian_battleship_Borodino> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:season . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?event2 . ?relation2 sem:roleType dbo:league . ?event2 owl:sameAs <http://dbpedia.org/resource/2009_Daegu_FC_season> . }  "
 			},
 			{
 				"id":44,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:country . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:category . ?entity1 owl:sameAs <http://dbpedia.org/resource/Canada> . ?event2 owl:sameAs <http://it.dbpedia.org/resource/UCI_America_Tour> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:champion . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:organisation . ?entity1 owl:sameAs <http://dbpedia.org/resource/Club_Africain_(handball)> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Tunisian_Handball_Federation> . }  "
 			},
 			{
 				"id":45,
-				"sparql_query": "SELECT DISTINCT ?entity1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:fastestDriver . ?relation2 rdf:object ?entity1 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:poleDriver . ?event1 owl:sameAs <http://dbpedia.org/resource/1962_Cape_Grand_Prix> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:homeStadium . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?event2 . ?relation2 sem:roleType dbo:successor . ?event1 owl:sameAs <http://dbpedia.org/resource/1997–98_Norwich_City_F.C._season> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Carrow_Road> . ?event2 owl:sameAs <http://dbpedia.org/resource/1996–97_Norwich_City_F.C._season> . } "
 			},
 			{
 				"id":46,
-				"sparql_query": "SELECT DISTINCT ?event2 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?event2 . ?relation1 sem:roleType dbo:predecessor . ?relation2 rdf:object ?event3 . ?relation2 rdf:subject ?event2 . ?relation2 sem:roleType dbo:season . ?event1 owl:sameAs <http://dbpedia.org/resource/2014_Ottawa_Fury_FC_season> . ?event3 owl:sameAs <http://dbpedia.org/resource/2015_in_Canadian_soccer> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:language . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:subsidiary . ?event1 owl:sameAs <http://dbpedia.org/resource/WhatsApp> . ?entity1 owl:sameAs <http://dbpedia.org/resource/German_language> . ?entity2 owl:sameAs <http://it.dbpedia.org/resource/Facebook_(azienda)> . } "
 			},
 			{
 				"id":47,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:homeStadium . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:league . ?entity1 owl:sameAs <http://dbpedia.org/resource/The_Den> . ?entity2 owl:sameAs <http://dbpedia.org/resource/EFL_League_One> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:coach . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:league . ?entity1 owl:sameAs <http://dbpedia.org/resource/Antonio_Soda> . ?event2 owl:sameAs <http://it.dbpedia.org/resource/Serie_C2_2004-2005> . }  "
 			},
 			{
 				"id":48,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:organisation . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:city . ?entity1 owl:sameAs <http://dbpedia.org/resource/Union_Cycliste_Internationale> . ?entity2 owl:sameAs <http://fr.dbpedia.org/resource/Zolder> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:bronzeMedalist . ?relation2 rdf:object ?event2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:nextEvent . ?event1 owl:sameAs <http://dbpedia.org/resource/Luge_at_the_1968_Winter_Olympics_–_Women's_singles> . ?entity1 owl:sameAs <http://dbpedia.org/resource/Angelika_Dünhaupt> . ?event2 owl:sameAs <http://dbpedia.org/resource/Luge_at_the_1972_Winter_Olympics_–_Women's_singles> . } "
 			},
 			{
 				"id":49,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:sport . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:city . ?entity1 owl:sameAs <http://dbpedia.org/resource/Beach_tennis> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Albena> . }  "
+				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?event1 . ?relation1 rdf:subject ?entity1 . ?relation1 sem:roleType dbo:bodyStyle . ?relation2 rdf:object ?event1 . ?relation2 rdf:subject ?entity2 . ?relation2 sem:roleType dbo:version . ?entity1 owl:sameAs <http://dbpedia.org/resource/Diatto_Ottovù_Zagato> . ?entity2 owl:sameAs <http://ru.dbpedia.org/resource/Pontiac_New_Series> . }  "
 			},
 			{
 				"id":50,
-				"sparql_query": "SELECT DISTINCT ?event1 WHERE { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:soccerTournamentLastChampion . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:sport . ?entity1 owl:sameAs <http://dbpedia.org/resource/K._Beerschot_V.A.C.> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Association_football> . }  "
+				"sparql_query": "ASK  { ?relation1 rdf:object ?entity1 . ?relation1 rdf:subject ?event1 . ?relation1 sem:roleType dbo:bronzeMedalist . ?relation2 rdf:object ?entity2 . ?relation2 rdf:subject ?event1 . ?relation2 sem:roleType dbo:goldMedalist . ?event1 owl:sameAs <http://dbpedia.org/resource/Canoeing_at_the_2008_Summer_Olympics_–_Men's_C-2_1000_metres> . ?entity1 owl:sameAs <http://dbpedia.org/resource/György_Kozmann> . ?entity2 owl:sameAs <http://dbpedia.org/resource/Andrei_Bahdanovich> . } "
 			}		
 		]	
 	}
